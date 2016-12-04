@@ -5,12 +5,18 @@ using System.IO;
 using System.Text;
 
 public class GameManager : MonoBehaviour {
-  // Default GameObject initializations to set in Unity
+  // Default GameObject prefab initializations
+  // Core objects
   public Camera camera;
   public GameObject plane;
   public GameObject wall;
   public GameObject player1prefab;
   public GameObject player2prefab;
+
+  // Power ups
+  public GameObject ninjaStarPrefab;
+  public GameObject onigiriPrefab;
+  public GameObject boostPrefab;
 
   // GameObjects after instantiating prefabs
   private GameObject player1;
@@ -32,7 +38,8 @@ public class GameManager : MonoBehaviour {
   private int lastWorldRowPosition;
 
   // Mainly for readability - enum wrappers for different items
-  private enum Objects{PLANE, WALL, PLAYER_1, PLAYER_2, TRAP, HOLE};
+  private enum Objects{PLANE, WALL, PLAYER_1, PLAYER_2, POWER_UP, TRAP, HOLE};
+  private enum PowerUps{NINJA_STAR,} // HEALTH, BOOST
 
   // At the beginning of initialization of game
 	void Start () {
@@ -68,17 +75,29 @@ public class GameManager : MonoBehaviour {
     }
   }
 
+  private void instantiateRandomPowerUp(int xVal, int zVal) {
+    PowerUps generatePowerUp = (PowerUps)(Random.Range(0, System.Enum.GetValues (typeof(PowerUps)).Length));
+    switch (generatePowerUp) {
+    case PowerUps.NINJA_STAR:
+      allObjects[xVal].Add(Instantiate(ninjaStarPrefab, new Vector3(xVal * 10, 5, (zVal * 10) - 45), ninjaStarPrefab.transform.rotation) as GameObject);
+      break;
+    }
+  }
+
   // Create type of object from its type of value
-  private void instantiateObject(int obj, int xVal, int zVal) {
+  private void instantiateObject(Objects obj, int xVal, int zVal) {
     switch (obj) {
-    case (int)Objects.WALL:
+    case Objects.WALL:
       allObjects[xVal].Add(Instantiate(wall, new Vector3(xVal * 10, 5, (zVal * 10) - 45), Quaternion.identity) as GameObject);
       break;
-    case (int)Objects.PLAYER_1:
+    case Objects.PLAYER_1:
       player1 = Instantiate(player1prefab, new Vector3(xVal * 10, 5, (zVal * 10) - 45), player1prefab.transform.rotation) as GameObject;
       break;
-    case (int)Objects.PLAYER_2:
+    case Objects.PLAYER_2:
       player2 = Instantiate(player2prefab, new Vector3(xVal * 10, 5, (zVal * 10) - 45), player2prefab.transform.rotation) as GameObject;
+      break;
+    case Objects.POWER_UP:
+      instantiateRandomPowerUp(xVal, zVal);
       break;
     }
   }
@@ -86,7 +105,7 @@ public class GameManager : MonoBehaviour {
   // Generate platform
   private void generatePlatform(int platform, int specificPlatform=-1) {
     string key = (platform).ToString () + "-";
-    if (specificPlatform == -1) { key += (Random.Range (1, 3).ToString ()); }
+    if (specificPlatform == -1) { key += (Random.Range (1, MAX_PLATFORMS_PREMADE + 1).ToString ()); }
     else { key += (specificPlatform).ToString (); }
     currentPlatform = platform;
 
@@ -95,19 +114,19 @@ public class GameManager : MonoBehaviour {
       allObjects [currentWorldRow] = new List<GameObject>();
       allPlatformRows.Add(Instantiate(plane, new Vector3(currentWorldRow*10.0f, 0,0), Quaternion.identity) as GameObject);
       for (int colIdx = 0; colIdx < MAP_NUM_COLS; colIdx++) {
-        instantiateObject(genPlatform[rowIdx, colIdx],currentWorldRow, colIdx);
+        instantiateObject((Objects)genPlatform[rowIdx, colIdx],currentWorldRow, colIdx);
       }
       currentWorldRow++;
     }
   }
 
   // Determine if player 1's x position is greater than player 2
-  public bool Player1isAhead() {
+  private bool Player1isAhead() {
     return player1.transform.position.x > player2.transform.position.x;
   }
 
   // Adjust camera to center on player furthest ahead
-  public void adjustCameraView() {
+  private void adjustCameraView() {
     float newXVal = camera.transform.position.x;
     if (Player1isAhead()) {
       if (camera.transform.position.x != player1.transform.position.x) {
@@ -121,7 +140,7 @@ public class GameManager : MonoBehaviour {
   }
 
   // Create or destroy platform as needed
-  public void alterMapAsNeeded() {
+  private void alterMapAsNeeded() {
     cameraBottomFOV = camera.transform.position.x - (camera.fieldOfView * 0.5f);
 
     // Create next platform if player nears the top of current generated platform
@@ -142,11 +161,14 @@ public class GameManager : MonoBehaviour {
           Destroy(game_object);
         }
         // Clean up Dictionary
-        allObjects[lastWorldRowPosition].RemoveAt(0);
         allObjects.Remove(lastWorldRowPosition);
         lastWorldRowPosition++;
       }
     }
+  }
+
+  public bool isGameOver() {
+    return player1.gameObject.GetComponent<Player>().isDead() || player2.gameObject.GetComponent<Player>().isDead();
   }
 
   // Update game per frame
