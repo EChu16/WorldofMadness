@@ -1,60 +1,78 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
 public class GameManager : MonoBehaviour {
+  // Default GameObject initializations to set in Unity
   public Camera camera;
   public GameObject plane;
   public GameObject wall;
   public GameObject player1prefab;
   public GameObject player2prefab;
+
+  // GameObjects after instantiating prefabs
   private GameObject player1;
   private GameObject player2;
+  private List<GameObject> allPlatformRows = new List<GameObject>();
+  private Dictionary<int, List<GameObject>> allObjects = new Dictionary<int, List<GameObject>>();
+
+  // Camera attributes
   private float cameraMoveSpeed = 15.0f;
-  private int numCols = 10;
-  private int currentRow;
-  private int mapPointer;
-  private float cameraTop;
-  private float cameraBottom;
-  private int[,] gameMap = new int[30,10];
+  private float cameraBottomFOV; // Field of View
+
+  // Map attributes
+  private Dictionary<string, int[,]> gameMaps = new Dictionary<string, int[,]>();
+  private int MAP_CHUNK_SIZE = 10;
+  private int MAX_PLATFORMS_PREMADE = 2;
+  private int MAP_NUM_COLS = 10;
+  private int currentPlatform;
+  private int currentWorldRow;
+  private int lastWorldRowPosition;
+
+  // Mainly for readability - enum wrappers for different items
   private enum Objects{PLANE, WALL, PLAYER_1, PLAYER_2, TRAP, HOLE};
 
+  // At the beginning of initialization of game
 	void Start () {
-    currentRow = 0;
-    mapPointer = 0;
-    loadMapFromFile("Maps/map_layout.txt");
-    generateRowsOfMap(10);
+    currentWorldRow = 0;
+    lastWorldRowPosition = 0;
+    loadMapPlatformsFromFile("Maps/map_layout.txt");
+    generatePlatform(0, 1); // Initial platform begins at 0
 	}
 
-  private void loadMapFromFile(string fileName) {
+  // Fast way to convert a type 'char' to type 'int'
+  public static int convertCharToIntFast(char val) {
+    return (val - 48);
+  }
+
+  // Load chunk of platform from text file
+  private int[,] loadMapChunk(StreamReader mapReader) {
+    int[,] mapChunk = new int[MAP_CHUNK_SIZE,10];
+    for (int row = 0; row < MAP_CHUNK_SIZE; ++row) {
+      string line = mapReader.ReadLine ();
+      for (int column = 0; column < line.Length; ++column) {
+        mapChunk[row,column] = convertCharToIntFast(line[column]);
+      }
+    }
+    return mapChunk;
+  }
+
+  // Load all platforms from text file
+  private void loadMapPlatformsFromFile(string fileName) {
     string row;
     StreamReader mapReader = new StreamReader(Application.dataPath + "/" + fileName, Encoding.Default);
-    int rowIdx = 0;
     while ((row = mapReader.ReadLine()) != null) {
-      for (int column = 0; column < row.Length; column++) {
-        gameMap[rowIdx,column] = convertCharToIntFast(row[column]);
-      }
-      rowIdx++;
+      gameMaps[row] = loadMapChunk(mapReader);
     }
   }
 
-  private void generateRowsOfMap(int amountOfRows) {
-    int endpoint = currentRow + amountOfRows;
-    while (currentRow < endpoint) {
-      Instantiate(plane, new Vector3(currentRow*10.0f, 0,0), Quaternion.identity);
-      for (int zVal = 0; zVal < numCols; zVal++) {
-        instantiateObject(gameMap[mapPointer, zVal],currentRow, zVal);
-      }
-      mapPointer = (mapPointer + 1 == 30) ? 3 : ++mapPointer;
-      currentRow++;
-    }
-  }
-
+  // Create type of object from its type of value
   private void instantiateObject(int obj, int xVal, int zVal) {
     switch (obj) {
     case (int)Objects.WALL:
-      Instantiate(wall, new Vector3(xVal * 10, 5, (zVal * 10) - 45), Quaternion.identity);
+      allObjects[xVal].Add(Instantiate(wall, new Vector3(xVal * 10, 5, (zVal * 10) - 45), Quaternion.identity) as GameObject);
       break;
     case (int)Objects.PLAYER_1:
       player1 = Instantiate(player1prefab, new Vector3(xVal * 10, 5, (zVal * 10) - 45), player1prefab.transform.rotation) as GameObject;
@@ -65,14 +83,30 @@ public class GameManager : MonoBehaviour {
     }
   }
 
-  public static int convertCharToIntFast(char val) {
-    return (val - 48);
+  // Generate platform
+  private void generatePlatform(int platform, int specificPlatform=-1) {
+    string key = (platform).ToString () + "-";
+    if (specificPlatform == -1) { key += (Random.Range (1, 3).ToString ()); }
+    else { key += (specificPlatform).ToString (); }
+    currentPlatform = platform;
+
+    int[,] genPlatform = gameMaps[key];
+    for (int rowIdx = 0; rowIdx < genPlatform.GetLength(0); rowIdx++) {
+      allObjects [currentWorldRow] = new List<GameObject>();
+      allPlatformRows.Add(Instantiate(plane, new Vector3(currentWorldRow*10.0f, 0,0), Quaternion.identity) as GameObject);
+      for (int colIdx = 0; colIdx < MAP_NUM_COLS; colIdx++) {
+        instantiateObject(genPlatform[rowIdx, colIdx],currentWorldRow, colIdx);
+      }
+      currentWorldRow++;
+    }
   }
 
+  // Determine if player 1's x position is greater than player 2
   public bool Player1isAhead() {
     return player1.transform.position.x > player2.transform.position.x;
   }
 
+  // Adjust camera to center on player furthest ahead
   public void adjustCameraView() {
     float newXVal = camera.transform.position.x;
     if (Player1isAhead()) {
@@ -86,14 +120,36 @@ public class GameManager : MonoBehaviour {
     camera.transform.position = new Vector3(newXVal, camera.transform.position.y, camera.transform.position.z);
   }
 
+  // Create or destroy platform as needed
   public void alterMapAsNeeded() {
-    cameraTop = camera.transform.position.x + (camera.fieldOfView * 0.5f);
-    cameraBottom = camera.transform.position.x - (camera.fieldOfView * 0.5f);
-    if((currentRow * 10) < player1.transform.position.x + 50 || (currentRow * 10) < player2.transform.position.x + 50) {
-      generateRowsOfMap (5);
+    cameraBottomFOV = camera.transform.position.x - (camera.fieldOfView * 0.5f);
+
+    // Create next platform if player nears the top of current generated platform
+    if((currentWorldRow * 10) < player1.transform.position.x + 50 || (currentWorldRow * 10) < player2.transform.position.x + 50) {
+      if (currentPlatform + 1 > MAX_PLATFORMS_PREMADE) { generatePlatform (1); }
+      else { generatePlatform (currentPlatform + 1); }
+    }
+
+    // Destroy platform rows if player doesn't see that platform anymore
+    if(cameraBottomFOV > ((lastWorldRowPosition * 10) + 14.5)) {
+      // Prevent removing a plane more than once
+      if (allPlatformRows [0].transform.position.x == lastWorldRowPosition * 10.0f) {
+        Destroy (allPlatformRows [0]);
+        // Remove from list
+        allPlatformRows.RemoveAt (0);
+        // Destroy all objects in that platform row
+        foreach(var game_object in allObjects[lastWorldRowPosition]) {
+          Destroy(game_object);
+        }
+        // Clean up Dictionary
+        allObjects[lastWorldRowPosition].RemoveAt(0);
+        allObjects.Remove(lastWorldRowPosition);
+        lastWorldRowPosition++;
+      }
     }
   }
 
+  // Update game per frame
 	void Update () {
     adjustCameraView();
     alterMapAsNeeded();

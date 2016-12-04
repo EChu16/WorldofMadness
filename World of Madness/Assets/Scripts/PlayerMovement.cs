@@ -9,21 +9,34 @@ public class PlayerMovement : MonoBehaviour {
   // Use this for initialization
   void Start () {
     myTransform = GetComponent<Transform>();
-    moveSpeed = 15.0f;
+    moveSpeed = 20.0f;
   }
 
   // Update is called once per frame
   void Update () {
     if (myTransform.tag == "player1") {
-      if (Input.GetKey (KeyCode.W)) {myTransform.position += transform.forward * Time.deltaTime * moveSpeed;}
-      if (Input.GetKey (KeyCode.S)) {myTransform.position -= transform.forward * Time.deltaTime * moveSpeed;}
-      if (Input.GetKey (KeyCode.A)) {myTransform.position -= transform.right * Time.deltaTime * moveSpeed;}
-      if (Input.GetKey (KeyCode.D)) {myTransform.position += transform.right * Time.deltaTime * moveSpeed;}
-    } else if (myTransform.tag == "player2") {
-      if (Input.GetKey (KeyCode.UpArrow)) {myTransform.position += transform.forward * Time.deltaTime * moveSpeed;}
-      if (Input.GetKey (KeyCode.DownArrow)) {myTransform.position -= transform.forward * Time.deltaTime * moveSpeed;}
-      if (Input.GetKey (KeyCode.LeftArrow)) {myTransform.position -= transform.right * Time.deltaTime * moveSpeed;}
-      if (Input.GetKey (KeyCode.RightArrow)) {myTransform.position += transform.right * Time.deltaTime * moveSpeed;}
+      float p1MoveX = Input.GetAxisRaw ("Horizontal");
+      float p2MoveY = Input.GetAxisRaw ("Vertical");
+      Vector3 movement = new Vector3 (p1MoveX, 0.0f, p2MoveY);
+      movement = Quaternion.Euler (0, 90, 0) * movement;
+      var rotation = Quaternion.LookRotation (movement);
+      if(p1MoveX != 0 || p2MoveY != 0)
+      {
+        myTransform.rotation = Quaternion.Slerp (myTransform.rotation, rotation, Time.deltaTime * moveSpeed);
+      }
+      myTransform.Translate (movement * moveSpeed * Time.deltaTime, Space.World);
+    }
+    else if (myTransform.tag == "player2") {
+      float p2MoveX = Input.GetAxisRaw ("Horizontal2");
+      float p2MoveY = Input.GetAxisRaw ("Vertical2");
+      Vector3 movement = new Vector3(p2MoveX, 0.0f, p2MoveY);
+      movement = Quaternion.Euler(0, 90, 0) * movement;
+      var rotation = Quaternion.LookRotation(movement);
+      if(p2MoveX != 0 || p2MoveY != 0)
+      {
+        myTransform.rotation = Quaternion.Slerp (myTransform.rotation, rotation, Time.deltaTime * moveSpeed);
+      }
+      myTransform.Translate (movement * moveSpeed * Time.deltaTime, Space.World);
     }
   }
 }
