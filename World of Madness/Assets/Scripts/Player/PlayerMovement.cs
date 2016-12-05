@@ -9,11 +9,12 @@ public class PlayerMovement : MonoBehaviour {
   // Use this for initialization
   void Start () {
     myTransform = GetComponent<Transform>();
-    moveSpeed = 20.0f;
   }
 
   // Update is called once per frame
   void Update () {
+    // Check move speed per frame
+    moveSpeed = GetComponent<Player>().getMoveSpeed();
     if (myTransform.tag == "player1") {
       float p1MoveX = Input.GetAxisRaw ("Horizontal");
       float p2MoveY = Input.GetAxisRaw ("Vertical");

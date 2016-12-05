@@ -15,8 +15,11 @@ public class GameManager : MonoBehaviour {
 
   // Power ups
   public GameObject ninjaStarPrefab;
-  public GameObject onigiriPrefab;
+  // Actives
+  public GameObject sushiPrefab;
   public GameObject boostPrefab;
+  //Traps
+  public GameObject sandpitPrefab;
 
   // GameObjects after instantiating prefabs
   private GameObject player1;
@@ -38,8 +41,10 @@ public class GameManager : MonoBehaviour {
   private int lastWorldRowPosition;
 
   // Mainly for readability - enum wrappers for different items
-  private enum Objects{PLANE, WALL, PLAYER_1, PLAYER_2, POWER_UP, TRAP, HOLE};
-  private enum PowerUps{NINJA_STAR,} // HEALTH, BOOST
+  private enum Objects{PLANE, WALL, PLAYER_1, PLAYER_2, POWER_UP, ACTIVE, PASSABLE_TRAP};
+  private enum PowerUps{NINJA_STAR};
+  private enum Actives{SUSHI};
+  private enum PassableTraps{SANDPIT};
 
   // At the beginning of initialization of game
 	void Start () {
@@ -75,11 +80,44 @@ public class GameManager : MonoBehaviour {
     }
   }
 
+  // Create a random power up
   private void instantiateRandomPowerUp(int xVal, int zVal) {
     PowerUps generatePowerUp = (PowerUps)(Random.Range(0, System.Enum.GetValues (typeof(PowerUps)).Length));
     switch (generatePowerUp) {
     case PowerUps.NINJA_STAR:
       allObjects[xVal].Add(Instantiate(ninjaStarPrefab, new Vector3(xVal * 10, 5, (zVal * 10) - 45), ninjaStarPrefab.transform.rotation) as GameObject);
+      break;
+    default:
+      // Should never hit here
+      Debug.Log ("Power up not found");
+      break;
+    }
+  }
+
+  // Create a random active
+  private void instantiateRandomActive(int xVal, int zVal) {
+    Actives generateActive = (Actives)(Random.Range(0, System.Enum.GetValues (typeof(Actives)).Length));
+    switch (generateActive) {
+    case Actives.SUSHI:
+      allObjects[xVal].Add(Instantiate(sushiPrefab, new Vector3(xVal * 10, 5, (zVal * 10) - 45), sushiPrefab.transform.rotation) as GameObject);
+      break;
+    default:
+      // Should never hit here
+      Debug.Log ("Active token not found");
+      break;
+    }
+  }
+
+  // Create a random Trap
+  private void instantiateRandomPassableTrap(int xVal, int zVal) {
+    PassableTraps generatePassableTrap = (PassableTraps)(Random.Range(0, System.Enum.GetValues (typeof(PassableTraps)).Length));
+    switch (generatePassableTrap) {
+    case PassableTraps.SANDPIT:
+      allObjects[xVal].Add(Instantiate(sandpitPrefab, new Vector3(xVal * 10, 0.0f, (zVal * 10) - 45), sandpitPrefab.transform.rotation) as GameObject);
+      break;
+    default:
+      // Should never hit here
+      Debug.Log ("Trap object not found");
       break;
     }
   }
@@ -98,6 +136,12 @@ public class GameManager : MonoBehaviour {
       break;
     case Objects.POWER_UP:
       instantiateRandomPowerUp(xVal, zVal);
+      break;
+    case Objects.ACTIVE:
+      instantiateRandomActive(xVal, zVal);
+      break;
+    case Objects.PASSABLE_TRAP:
+      instantiateRandomPassableTrap(xVal, zVal);
       break;
     }
   }
@@ -167,13 +211,16 @@ public class GameManager : MonoBehaviour {
     }
   }
 
+  // Check if game is over
   public bool isGameOver() {
-    return player1.gameObject.GetComponent<Player>().isDead() || player2.gameObject.GetComponent<Player>().isDead();
+    return player1.gameObject == null || player2.gameObject == null;
   }
 
   // Update game per frame
 	void Update () {
-    adjustCameraView();
-    alterMapAsNeeded();
+    if (!isGameOver ()) {
+      adjustCameraView ();
+      alterMapAsNeeded ();
+    }
   }
 }
