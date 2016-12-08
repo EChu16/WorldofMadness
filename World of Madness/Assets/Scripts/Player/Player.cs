@@ -4,7 +4,7 @@ using System.Collections;
 public class Player : MonoBehaviour {
   // Player attributes
   private int lives;
-  private float moveSpeed = 20.0f;
+  private float moveSpeed = 25.0f;
   private PowerUps currentPowerup;
   private Actives currentActive;
 
@@ -92,7 +92,7 @@ public class Player : MonoBehaviour {
     case PowerUps.NINJA_STAR:
       // Create Ninja Star and shoot it
       ninjaStar.direction = transform.forward;
-      Instantiate (ninjaStar, transform.position + transform.forward*2, transform.rotation);
+      Instantiate (ninjaStar, transform.position + transform.forward*5, ninjaStar.transform.rotation);
       this.amountOfPowerUpItem--;
       break;
     }

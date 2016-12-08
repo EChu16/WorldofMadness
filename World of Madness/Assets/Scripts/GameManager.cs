@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviour {
     PassableTraps generatePassableTrap = (PassableTraps)(Random.Range(0, System.Enum.GetValues (typeof(PassableTraps)).Length));
     switch (generatePassableTrap) {
     case PassableTraps.SANDPIT:
-      allObjects[xVal].Add(Instantiate(sandpitPrefab, new Vector3(xVal * 10, 0.0f, (zVal * 10) - 45), sandpitPrefab.transform.rotation) as GameObject);
+      allObjects[xVal].Add(Instantiate(sandpitPrefab, new Vector3(xVal * 10, 0.5f, (zVal * 10) - 45), sandpitPrefab.transform.rotation) as GameObject);
       break;
     default:
       // Should never hit here
@@ -126,13 +126,14 @@ public class GameManager : MonoBehaviour {
   private void instantiateObject(Objects obj, int xVal, int zVal) {
     switch (obj) {
     case Objects.WALL:
+      //allObjects[xVal].Add(Instantiate(wall, new Vector3((xVal * 10) - 4.0f, 0.0f, (zVal * 10) - 48.8f), Quaternion.identity) as GameObject);
       allObjects[xVal].Add(Instantiate(wall, new Vector3(xVal * 10, 5, (zVal * 10) - 45), Quaternion.identity) as GameObject);
       break;
     case Objects.PLAYER_1:
-      player1 = Instantiate(player1prefab, new Vector3(xVal * 10, 5, (zVal * 10) - 45), player1prefab.transform.rotation) as GameObject;
+      player1 = Instantiate(player1prefab, new Vector3(xVal * 10, 0, (zVal * 10) - 45), player1prefab.transform.rotation) as GameObject;
       break;
     case Objects.PLAYER_2:
-      player2 = Instantiate(player2prefab, new Vector3(xVal * 10, 5, (zVal * 10) - 45), player2prefab.transform.rotation) as GameObject;
+      player2 = Instantiate(player2prefab, new Vector3(xVal * 10, 0, (zVal * 10) - 45), player2prefab.transform.rotation) as GameObject;
       break;
     case Objects.POWER_UP:
       instantiateRandomPowerUp(xVal, zVal);
@@ -194,9 +195,12 @@ public class GameManager : MonoBehaviour {
     }
 
     // Destroy platform rows if player doesn't see that platform anymore
-    if(cameraBottomFOV > ((lastWorldRowPosition * 10) + 14.5)) {
+    if(cameraBottomFOV > ((lastWorldRowPosition * 10) + 7.0f)) {
       // Prevent removing a plane more than once
-      if (allPlatformRows [0].transform.position.x == lastWorldRowPosition * 10.0f) {
+      Debug.Log(allPlatformRows[0].transform.position.x);
+      Debug.Log ((lastWorldRowPosition * 10.0f));
+      Debug.Log(allPlatformRows[0].transform.position.x == (lastWorldRowPosition * 10.0f));
+      if (allPlatformRows[0].transform.position.x == (lastWorldRowPosition * 10.0f)) {
         Destroy (allPlatformRows [0]);
         // Remove from list
         allPlatformRows.RemoveAt (0);
