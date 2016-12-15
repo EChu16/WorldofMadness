@@ -45,7 +45,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Arsenal\Bomb.cs" />
+     <Compile Include="Assets\Scripts\Arsenal\BombShrapnel.cs" />
      <Compile Include="Assets\Scripts\Arsenal\NinjaStar.cs" />
+     <Compile Include="Assets\Scripts\CameraManager.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\GameTokens\Active.cs" />
      <Compile Include="Assets\Scripts\GameTokens\PowerUp.cs" />

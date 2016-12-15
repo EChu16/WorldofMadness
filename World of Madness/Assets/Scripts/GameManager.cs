@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour {
 
   // Power ups
   public GameObject ninjaStarPrefab;
+  public GameObject bombPrefab;
   // Actives
   public GameObject sushiPrefab;
   public GameObject boostPrefab;
@@ -42,8 +43,8 @@ public class GameManager : MonoBehaviour {
 
   // Mainly for readability - enum wrappers for different items
   private enum Objects{PLANE, WALL, PLAYER_1, PLAYER_2, POWER_UP, ACTIVE, PASSABLE_TRAP};
-  private enum PowerUps{NINJA_STAR};
-  private enum Actives{SUSHI};
+  private enum PowerUps{NINJA_STAR, BOMB};
+  private enum Actives{SUSHI, BOOST};
   private enum PassableTraps{SANDPIT};
 
   // At the beginning of initialization of game
@@ -87,6 +88,9 @@ public class GameManager : MonoBehaviour {
     case PowerUps.NINJA_STAR:
       allObjects[xVal].Add(Instantiate(ninjaStarPrefab, new Vector3(xVal * 10, 5, (zVal * 10) - 45), ninjaStarPrefab.transform.rotation) as GameObject);
       break;
+    case PowerUps.BOMB:
+      allObjects [xVal].Add (Instantiate (bombPrefab, new Vector3 (xVal * 10, 5, (zVal * 10) - 45), bombPrefab.transform.rotation) as GameObject);
+      break;
     default:
       // Should never hit here
       Debug.Log ("Power up not found");
@@ -100,6 +104,9 @@ public class GameManager : MonoBehaviour {
     switch (generateActive) {
     case Actives.SUSHI:
       allObjects[xVal].Add(Instantiate(sushiPrefab, new Vector3(xVal * 10, 5, (zVal * 10) - 45), sushiPrefab.transform.rotation) as GameObject);
+      break;
+    case Actives.BOOST:
+      allObjects [xVal].Add (Instantiate (boostPrefab, new Vector3 (xVal * 10, 5, (zVal * 10) - 45), boostPrefab.transform.rotation) as GameObject);
       break;
     default:
       // Should never hit here
@@ -197,9 +204,6 @@ public class GameManager : MonoBehaviour {
     // Destroy platform rows if player doesn't see that platform anymore
     if(cameraBottomFOV > ((lastWorldRowPosition * 10) + 7.0f)) {
       // Prevent removing a plane more than once
-      Debug.Log(allPlatformRows[0].transform.position.x);
-      Debug.Log ((lastWorldRowPosition * 10.0f));
-      Debug.Log(allPlatformRows[0].transform.position.x == (lastWorldRowPosition * 10.0f));
       if (allPlatformRows[0].transform.position.x == (lastWorldRowPosition * 10.0f)) {
         Destroy (allPlatformRows [0]);
         // Remove from list

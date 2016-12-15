@@ -22,9 +22,10 @@ public class NinjaStar : MonoBehaviour {
     if (col.gameObject.tag == "wall") {
       this.hasAlreadyCollided = true;
       this.continueTranslate = false;
+      GetComponent<BoxCollider>().isTrigger = true;
     } 
     // If ninja star collides into a player, make sure it hasn't collided yet
-    else if (col.gameObject.tag == "player1" || col.gameObject.tag == "player2" && !this.hasAlreadyCollided) {
+    else if ((col.gameObject.tag == "player1" || col.gameObject.tag == "player2") && !this.hasAlreadyCollided) {
       col.gameObject.GetComponent<Player>().loseLife();
       Destroy(gameObject);
     }

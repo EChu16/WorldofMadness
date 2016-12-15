@@ -9,15 +9,16 @@ public class Player : MonoBehaviour {
   private Actives currentActive;
 
   // Active/Power up attributes
-  private int activeExpireTime;
+  private float activeExpireTime;
   private int amountOfPowerUpItem;
 
   // Power up prefabs
   public NinjaStar ninjaStar;
+  public Bomb bomb;
 
   // Mostly for readability
   // Power Ups that a Player can collect in game
-  private enum PowerUps {NONE, NINJA_STAR};
+  private enum PowerUps {NONE, NINJA_STAR, BOMB};
   // Actives that a Player can collect in game
   private enum Actives {NONE, SUSHI, BOOST};
 
@@ -57,6 +58,9 @@ public class Player : MonoBehaviour {
     case PowerUps.NINJA_STAR:
       this.amountOfPowerUpItem = 3;
       break;
+    case PowerUps.BOMB:
+      this.amountOfPowerUpItem = 1;
+      break;
     }
   }
 
@@ -68,12 +72,36 @@ public class Player : MonoBehaviour {
       gainLife ();
       this.currentActive = Actives.NONE;
       break;
+    case Actives.BOOST:
+      this.activeExpireTime = 3.0f;
+      this.setMoveSpeed (this.getMoveSpeed () + 5.0f);
+      break;
     }
   }
 
   // Check if player is dead
   public bool isDead() {
     return this.lives == 0;
+  }
+
+  // Check if player has a current active
+  private bool hasActive() {
+    return this.currentActive != Actives.NONE;
+  }
+
+  // Decreases a current active time so that it can hit <= 0
+  private void decreaseActiveTime() {
+    this.activeExpireTime -= Time.deltaTime;
+  }
+
+  // Resets player to their original state and removes the active
+  private void stopActive() {
+    switch (this.currentActive) {
+    case Actives.BOOST:
+      this.setMoveSpeed (this.getMoveSpeed () - 5.0f);
+      break;
+    };
+    this.currentActive = Actives.NONE;
   }
 
   // Check if player has an existing powerup active
@@ -93,6 +121,11 @@ public class Player : MonoBehaviour {
       // Create Ninja Star and shoot it
       ninjaStar.direction = transform.forward;
       Instantiate (ninjaStar, transform.position + transform.forward*5, ninjaStar.transform.rotation);
+      this.amountOfPowerUpItem--;
+      break;
+    case PowerUps.BOMB:
+      bomb.direction = transform.forward;
+      Instantiate (bomb, transform.position + transform.forward*5, bomb.transform.rotation);
       this.amountOfPowerUpItem--;
       break;
     }
@@ -136,6 +169,17 @@ public class Player : MonoBehaviour {
         checkForPlayerInput ();
         if (this.amountOfPowerUpItem == 0) {
           this.currentPowerup = PowerUps.NONE;
+        }
+      }
+
+      // Check if player has an active
+      if (hasActive ()) {
+        if (this.activeExpireTime >= 0) {
+          decreaseActiveTime ();
+        }
+        // Stop active when it expires
+        else {
+          stopActive();
         }
       }
     }
