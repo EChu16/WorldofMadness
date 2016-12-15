@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour {
   // Actives
   public GameObject sushiPrefab;
   public GameObject boostPrefab;
+  public GameObject gameFreezePrefab;
   //Traps
   public GameObject sandpitPrefab;
 
@@ -29,8 +30,10 @@ public class GameManager : MonoBehaviour {
   private Dictionary<int, List<GameObject>> allObjects = new Dictionary<int, List<GameObject>>();
 
   // Camera attributes
+  public bool cameraCanMove = true;
   private float cameraMoveSpeed = 15.0f;
   private float cameraBottomFOV; // Field of View
+  private Vector3 lastCameraPosition;
 
   // Map attributes
   private Dictionary<string, int[,]> gameMaps = new Dictionary<string, int[,]>();
@@ -44,7 +47,7 @@ public class GameManager : MonoBehaviour {
   // Mainly for readability - enum wrappers for different items
   private enum Objects{PLANE, WALL, PLAYER_1, PLAYER_2, POWER_UP, ACTIVE, PASSABLE_TRAP};
   private enum PowerUps{NINJA_STAR, BOMB};
-  private enum Actives{SUSHI, BOOST};
+  private enum Actives{SUSHI, BOOST, GAME_FREEZE};
   private enum PassableTraps{SANDPIT};
 
   // At the beginning of initialization of game
@@ -107,6 +110,9 @@ public class GameManager : MonoBehaviour {
       break;
     case Actives.BOOST:
       allObjects [xVal].Add (Instantiate (boostPrefab, new Vector3 (xVal * 10, 5, (zVal * 10) - 45), boostPrefab.transform.rotation) as GameObject);
+      break;
+    case Actives.GAME_FREEZE:
+      allObjects [xVal].Add (Instantiate (gameFreezePrefab, new Vector3 (xVal * 10, 5, (zVal * 10) - 45), gameFreezePrefab.transform.rotation) as GameObject);
       break;
     default:
       // Should never hit here
@@ -219,6 +225,11 @@ public class GameManager : MonoBehaviour {
     }
   }
 
+  // Don't allow camera to readjust (Freeze effect)
+  public void toggleCameraMovement() {
+    this.cameraCanMove = !this.cameraCanMove;
+  }
+
   // Check if game is over
   public bool isGameOver() {
     return player1.gameObject == null || player2.gameObject == null;
@@ -227,7 +238,13 @@ public class GameManager : MonoBehaviour {
   // Update game per frame
 	void Update () {
     if (!isGameOver ()) {
-      adjustCameraView ();
+      if (this.cameraCanMove) {
+        adjustCameraView ();
+        lastCameraPosition = Camera.main.transform.position;
+      }
+      else {
+        Camera.main.transform.position = lastCameraPosition;
+      }
       alterMapAsNeeded ();
     }
   }

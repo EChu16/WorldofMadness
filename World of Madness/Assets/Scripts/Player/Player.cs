@@ -20,7 +20,7 @@ public class Player : MonoBehaviour {
   // Power Ups that a Player can collect in game
   private enum PowerUps {NONE, NINJA_STAR, BOMB};
   // Actives that a Player can collect in game
-  private enum Actives {NONE, SUSHI, BOOST};
+  private enum Actives {NONE, SUSHI, BOOST, GAME_FREEZE};
 
   // Set default attributes
   void Start() {
@@ -76,6 +76,10 @@ public class Player : MonoBehaviour {
       this.activeExpireTime = 3.0f;
       this.setMoveSpeed (this.getMoveSpeed () + 5.0f);
       break;
+    case Actives.GAME_FREEZE:
+      this.activeExpireTime = 8.0f;
+      GameObject.FindWithTag("GameController").GetComponent<GameManager>().toggleCameraMovement();
+      break;
     }
   }
 
@@ -99,6 +103,9 @@ public class Player : MonoBehaviour {
     switch (this.currentActive) {
     case Actives.BOOST:
       this.setMoveSpeed (this.getMoveSpeed () - 5.0f);
+      break;
+    case Actives.GAME_FREEZE:
+      GameObject.FindWithTag("GameController").GetComponent<GameManager>().toggleCameraMovement();
       break;
     };
     this.currentActive = Actives.NONE;
