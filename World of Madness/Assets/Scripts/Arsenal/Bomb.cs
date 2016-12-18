@@ -14,7 +14,7 @@ public class Bomb : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
     this.speed = 35.0f;
-    this.expireTime = 3.0f;
+    this.expireTime = 2.5f;
     this.exploded = false;
     this.continueTranslate = true;
 	}

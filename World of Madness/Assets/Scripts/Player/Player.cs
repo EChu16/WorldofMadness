@@ -5,6 +5,8 @@ public class Player : MonoBehaviour {
   // Player attributes
   private int lives;
   private float moveSpeed = 25.0f;
+  private float hitMarkerExpireTime;
+  private Color originalPlayerColor;
   private PowerUps currentPowerup;
   private Actives currentActive;
 
@@ -29,8 +31,11 @@ public class Player : MonoBehaviour {
     this.activeExpireTime = -1;
     this.powerUpDelayTime = -1;
     this.currentDelayTime = -1;
+    this.hitMarkerExpireTime = -1;
     this.currentPowerup = PowerUps.NONE;
     this.currentActive = Actives.NONE;
+    this.originalPlayerColor = transform.Find("pCube1").GetComponent<Renderer>().material.color;
+    Debug.Log (this.originalPlayerColor);
   }
 
   // Have player gain life when collecting sushi tokens
@@ -41,7 +46,8 @@ public class Player : MonoBehaviour {
   // Have player lose life when hurt
   public void loseLife() {
     this.lives -= 1;
-    showHitMarker();
+    this.hitMarkerExpireTime = 0.1f;
+    showPlayerHitMarker();
   }
 
   // Set player's move speed
@@ -174,8 +180,14 @@ public class Player : MonoBehaviour {
   }
 
   // Flash player color to show it was hit
-  private void showHitMarker() {
+  private void showPlayerHitMarker() {
+    transform.Find("pCube1").GetComponent<Renderer>().material.color = Color.white;
+    decreaseHitMarkerExpireTime();
+  }
 
+  // Decrease hit marker expire time
+  private void decreaseHitMarkerExpireTime() {
+    this.hitMarkerExpireTime -= Time.deltaTime;
   }
 
   // Update game per frame while checking for conditions
@@ -206,6 +218,16 @@ public class Player : MonoBehaviour {
         else {
           stopActive();
         }
+      }
+
+      // Check if player was hit
+      if (this.hitMarkerExpireTime >= 0) {
+        Debug.Log ("hit color");
+        showPlayerHitMarker();
+      }
+      else {
+        transform.Find("pCube1").GetComponent<Renderer>().material.color = this.originalPlayerColor;
+        Debug.Log ("original color");
       }
     }
     else {
