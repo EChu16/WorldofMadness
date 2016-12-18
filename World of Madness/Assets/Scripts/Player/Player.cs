@@ -39,6 +39,7 @@ public class Player : MonoBehaviour {
   // Have player lose life when hurt
   public void loseLife() {
     this.lives -= 1;
+    showHitMarker();
   }
 
   // Set player's move speed
@@ -56,7 +57,7 @@ public class Player : MonoBehaviour {
     this.currentPowerup = (PowerUps)powerUp;
     switch (this.currentPowerup) {
     case PowerUps.NINJA_STAR:
-      this.amountOfPowerUpItem = 3;
+      this.amountOfPowerUpItem = 10;
       break;
     case PowerUps.BOMB:
       this.amountOfPowerUpItem = 1;
@@ -160,6 +161,11 @@ public class Player : MonoBehaviour {
   // Check if player fell off the map
   private bool playerFellOff() {
     return transform.position.y < -5.0f;
+  }
+
+  // Flash player color to show it was hit
+  private void showHitMarker() {
+
   }
 
   // Update game per frame while checking for conditions

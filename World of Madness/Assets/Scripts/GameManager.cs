@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour {
   public GameObject gameFreezePrefab;
   //Traps
   public GameObject sandpitPrefab;
+  public GameObject spikePrefab;
 
   // GameObjects after instantiating prefabs
   private GameObject player1;
@@ -45,10 +46,11 @@ public class GameManager : MonoBehaviour {
   private int lastWorldRowPosition;
 
   // Mainly for readability - enum wrappers for different items
-  private enum Objects{PLANE, WALL, PLAYER_1, PLAYER_2, POWER_UP, ACTIVE, PASSABLE_TRAP};
+  private enum Objects{PLANE, WALL, PLAYER_1, PLAYER_2, POWER_UP, ACTIVE, PASSABLE_TRAP, DEATH_TRAP};
   private enum PowerUps{NINJA_STAR, BOMB};
   private enum Actives{SUSHI, BOOST, GAME_FREEZE};
   private enum PassableTraps{SANDPIT};
+  private enum DeathTraps{SPIKES};
 
   // At the beginning of initialization of game
 	void Start () {
@@ -130,7 +132,21 @@ public class GameManager : MonoBehaviour {
       break;
     default:
       // Should never hit here
-      Debug.Log ("Trap object not found");
+      Debug.Log ("Passable trap object not found");
+      break;
+    }
+  }
+
+  // Create a random Trap
+  private void instantiateRandomDeathTrap(int xVal, int zVal) {
+    DeathTraps generateDeathTrap = (DeathTraps)(Random.Range(0, System.Enum.GetValues (typeof(DeathTraps)).Length));
+    switch (generateDeathTrap) {
+    case DeathTraps.SPIKES:
+      allObjects[xVal].Add(Instantiate(spikePrefab, new Vector3(xVal * 10, 0.5f, (zVal * 10) - 45), spikePrefab.transform.rotation) as GameObject);
+      break;
+    default:
+      // Should never hit here
+      Debug.Log ("Death trap object not found");
       break;
     }
   }
@@ -156,6 +172,9 @@ public class GameManager : MonoBehaviour {
       break;
     case Objects.PASSABLE_TRAP:
       instantiateRandomPassableTrap(xVal, zVal);
+      break;
+    case Objects.DEATH_TRAP:
+      instantiateRandomDeathTrap(xVal, zVal);
       break;
     }
   }
@@ -241,11 +260,14 @@ public class GameManager : MonoBehaviour {
       if (this.cameraCanMove) {
         adjustCameraView ();
         lastCameraPosition = Camera.main.transform.position;
-      }
-      else {
+      } else {
         Camera.main.transform.position = lastCameraPosition;
       }
       alterMapAsNeeded ();
+    } else {
+      Camera.main.transform.position = lastCameraPosition;
     }
+
+    Camera.main.transform.position += Camera.main.GetComponent<CameraManager>().shakeMod;
   }
 }

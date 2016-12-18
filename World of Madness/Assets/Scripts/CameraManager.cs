@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class CameraManager : MonoBehaviour {
-  // Credits to https://gist.github.com/ftvs/5822103
+  // Modification of https://gist.github.com/ftvs/5822103
   // Transform of the camera to shake. Grabs the gameObject's transform
   // if null.
   public Transform camTransform;
@@ -13,6 +13,7 @@ public class CameraManager : MonoBehaviour {
   // Amplitude of the shake. A larger value shakes the camera harder.
   public float shakeAmount = 0.8f;
   public float decreaseFactor = 1.0f;
+  public Vector3 shakeMod;
 
   Vector3 originalPos;
 
@@ -28,23 +29,18 @@ public class CameraManager : MonoBehaviour {
     }
   }
 
-  void OnEnable()
-  {
-    originalPos = camTransform.localPosition;
-  }
-
   void Update()
   {
     if (shakeDuration > 0)
     {
-      camTransform.localPosition = originalPos + Random.insideUnitSphere * shakeAmount;
+      shakeMod = Random.insideUnitSphere * shakeAmount;
 
       shakeDuration -= Time.deltaTime * decreaseFactor;
     }
     else
     {
       shakeDuration = 0f;
-      camTransform.localPosition = originalPos;
+      shakeMod = new Vector3(0,0,0);
     }
   }
 

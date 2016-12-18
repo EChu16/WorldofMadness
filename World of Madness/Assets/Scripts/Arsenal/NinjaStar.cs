@@ -11,7 +11,7 @@ public class NinjaStar : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-    this.speed = 35.0f;
+    this.speed = 40.0f;
     this.expireTime = 5.0f;
     this.continueTranslate = true;
     this.hasAlreadyCollided = false;
