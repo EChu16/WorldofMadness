@@ -10,7 +10,8 @@ public class Player : MonoBehaviour {
 
   // Active/Power up attributes
   private float activeExpireTime;
-  private int amountOfPowerUpItem;
+  private float powerUpDelayTime;
+  private float currentDelayTime;
 
   // Power up prefabs
   public NinjaStar ninjaStar;
@@ -26,7 +27,8 @@ public class Player : MonoBehaviour {
   void Start() {
     this.lives = 3;
     this.activeExpireTime = -1;
-    this.amountOfPowerUpItem = -1;
+    this.powerUpDelayTime = -1;
+    this.currentDelayTime = -1;
     this.currentPowerup = PowerUps.NONE;
     this.currentActive = Actives.NONE;
   }
@@ -52,15 +54,20 @@ public class Player : MonoBehaviour {
     return this.moveSpeed;
   }
 
+  // Decreases a current power up delay time so that it can hit <= 0
+  private void decreasePowerUpDelayTime() {
+    this.currentDelayTime -= Time.deltaTime;
+  }
+
   // Set power up to player
   public void setPowerUp(int powerUp) {
     this.currentPowerup = (PowerUps)powerUp;
     switch (this.currentPowerup) {
     case PowerUps.NINJA_STAR:
-      this.amountOfPowerUpItem = 10;
+      this.powerUpDelayTime = 1.0f;
       break;
     case PowerUps.BOMB:
-      this.amountOfPowerUpItem = 1;
+      this.powerUpDelayTime = 2.5f;
       break;
     }
   }
@@ -78,7 +85,7 @@ public class Player : MonoBehaviour {
       this.setMoveSpeed (this.getMoveSpeed () + 5.0f);
       break;
     case Actives.GAME_FREEZE:
-      this.activeExpireTime = 8.0f;
+      this.activeExpireTime = 10.0f;
       GameObject.FindWithTag("GameController").GetComponent<GameManager>().toggleCameraMovement();
       break;
     }
@@ -129,26 +136,29 @@ public class Player : MonoBehaviour {
       // Create Ninja Star and shoot it
       ninjaStar.direction = transform.forward;
       Instantiate (ninjaStar, transform.position + transform.forward*5, ninjaStar.transform.rotation);
-      this.amountOfPowerUpItem--;
       break;
     case PowerUps.BOMB:
       bomb.direction = transform.forward;
       Instantiate (bomb, transform.position + transform.forward*5, bomb.transform.rotation);
-      this.amountOfPowerUpItem--;
       break;
     }
+    this.currentDelayTime = this.powerUpDelayTime;
   }
 
   // See if player wants to use their powerup or item
   public void checkForPlayerInput() {
     if (transform.tag == "player1") {
       if (Input.GetKeyDown (KeyCode.C)) {
-        usePowerUp(currentPowerup);
+        if (this.currentDelayTime <= 0) {
+          usePowerUp (this.currentPowerup);
+        }
       }
     }
     else if (transform.tag == "player2") {
       if (Input.GetKeyDown (KeyCode.Slash)) {
-        usePowerUp(currentPowerup);
+        if (this.currentDelayTime <= 0) {
+          usePowerUp (this.currentPowerup);
+        }
       }
     }
   }
@@ -179,9 +189,11 @@ public class Player : MonoBehaviour {
 
       // Check for player input only if player has a powerup
       if (hasPowerUp ()) {
-        checkForPlayerInput ();
-        if (this.amountOfPowerUpItem == 0) {
-          this.currentPowerup = PowerUps.NONE;
+        if (this.currentDelayTime >= 0) {
+          decreasePowerUpDelayTime();
+        }
+        else {
+          checkForPlayerInput();
         }
       }
 
