@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour {
   public GameObject sandpitPrefab;
   public GameObject spikePrefab;
   public GameObject playerFreezePrefab;
+  public GameObject lavaPrefab;
 
   // GameObjects after instantiating prefabs
   private GameObject player1;
@@ -37,6 +38,7 @@ public class GameManager : MonoBehaviour {
   private float cameraBottomFOV; // Field of View
   private float originalYPos;
   private Vector3 lastCameraPosition;
+  private Vector3 beforeShakeCameraPosition;
 
   // Map attributes
   private Dictionary<string, int[,]> gameMaps = new Dictionary<string, int[,]>();
@@ -52,7 +54,7 @@ public class GameManager : MonoBehaviour {
   private enum PowerUps{NINJA_STAR, BOMB};
   private enum Actives{SUSHI, BOOST, GAME_FREEZE};
   private enum PassableTraps{SANDPIT, PLAYER_FREEZE};
-  private enum DeathTraps{SPIKES};
+  private enum DeathTraps{SPIKES, LAVA};
 
 
   // At the beginning of initialization of game
@@ -157,6 +159,9 @@ public class GameManager : MonoBehaviour {
     switch (generateDeathTrap) {
     case DeathTraps.SPIKES:
       allObjects[xVal].Add(Instantiate(spikePrefab, new Vector3(xVal * 10, 0.5f, (zVal * 10) - 45), spikePrefab.transform.rotation) as GameObject);
+      break;
+    case DeathTraps.LAVA:
+      allObjects[xVal].Add(Instantiate(lavaPrefab, new Vector3(xVal * 10, 0.5f, (zVal * 10) - 45), lavaPrefab.transform.rotation) as GameObject);
       break;
     default:
       // Should never hit here
@@ -286,6 +291,8 @@ public class GameManager : MonoBehaviour {
         adjustCameraView ();
       }
       else {
+        float xShift = lastCameraPosition.x - Camera.main.transform.position.x;
+        Camera.main.GetComponent<DisplayUI> ().updateUIPositions (xShift);
         Camera.main.transform.position = lastCameraPosition;
       }
       alterMapAsNeeded();
@@ -293,7 +300,11 @@ public class GameManager : MonoBehaviour {
     else {
       Camera.main.transform.position = lastCameraPosition;
     }
+    Debug.Log (Camera.main.transform.position);
+    beforeShakeCameraPosition = Camera.main.transform.position;
     Camera.main.transform.position += Camera.main.GetComponent<CameraManager>().shakeMod;
+    float difference =  Camera.main.transform.position.x - beforeShakeCameraPosition.x;
+    Camera.main.GetComponent<DisplayUI> ().updateUIPositions (difference);
     Camera.main.transform.position = new Vector3 (Camera.main.transform.position.x, this.originalYPos, Camera.main.transform.position.z);
   }
 }
