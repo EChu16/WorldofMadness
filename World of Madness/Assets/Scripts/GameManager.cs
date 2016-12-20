@@ -7,7 +7,7 @@ using System.Text;
 public class GameManager : MonoBehaviour {
   // Default GameObject prefab initializations
   // Core objects
-  public Camera camera;
+  public Camera displayCam;
   public GameObject plane;
   public GameObject wall;
   public GameObject player1prefab;
@@ -227,24 +227,25 @@ public class GameManager : MonoBehaviour {
 
   // Adjust camera to center on player furthest ahead
   private void adjustCameraView() {
-    float newXVal = camera.transform.position.x;
+    float newXVal = Camera.main.transform.position.x;
     if (Player1isAhead()) {
-      if (camera.transform.position.x != player1.transform.position.x) {
+      if (Camera.main.transform.position.x != player1.transform.position.x) {
         newXVal = (player1.transform.position + transform.forward * Time.deltaTime * cameraMoveSpeed).x;
       }
     }
-    else if (camera.transform.position.x != player2.transform.position.x) {
+    else if (Camera.main.transform.position.x != player2.transform.position.x) {
       newXVal = (player2.transform.position + transform.forward * Time.deltaTime * cameraMoveSpeed).x;
     }
-    camera.transform.position = new Vector3(newXVal, camera.transform.position.y, camera.transform.position.z);
+    Camera.main.transform.position = new Vector3(newXVal, Camera.main.transform.position.y, Camera.main.transform.position.z);
+    displayCam.transform.position = new Vector3(newXVal, displayCam.transform.position.y, displayCam.transform.position.z);
 
-    Camera.main.GetComponent<DisplayUI>().updateUIPositions(newXVal - lastCameraPosition.x);
+    displayCam.GetComponent<DisplayUI>().updateUIPositions(newXVal - lastCameraPosition.x);
   }
 
 
   // Create or destroy platform as needed
   private void alterMapAsNeeded() {
-    cameraBottomFOV = camera.transform.position.x - (camera.fieldOfView * 0.5f);
+    cameraBottomFOV = Camera.main.transform.position.x - (Camera.main.fieldOfView * 0.5f);
 
     // Create next platform if player nears the top of current generated platform
     if((currentWorldRow * 10) < player1.transform.position.x + 50 || (currentWorldRow * 10) < player2.transform.position.x + 50) {
@@ -292,19 +293,20 @@ public class GameManager : MonoBehaviour {
       }
       else {
         float xShift = lastCameraPosition.x - Camera.main.transform.position.x;
-        Camera.main.GetComponent<DisplayUI> ().updateUIPositions (xShift);
+        displayCam.GetComponent<DisplayUI> ().updateUIPositions (xShift);
         Camera.main.transform.position = lastCameraPosition;
+        displayCam.transform.position = lastCameraPosition;
       }
       alterMapAsNeeded();
     }
     else {
       Camera.main.transform.position = lastCameraPosition;
+      displayCam.transform.position = lastCameraPosition;
     }
-    Debug.Log (Camera.main.transform.position);
     beforeShakeCameraPosition = Camera.main.transform.position;
     Camera.main.transform.position += Camera.main.GetComponent<CameraManager>().shakeMod;
-    float difference =  Camera.main.transform.position.x - beforeShakeCameraPosition.x;
-    Camera.main.GetComponent<DisplayUI> ().updateUIPositions (difference);
+    float x_shift =  Camera.main.transform.position.x - beforeShakeCameraPosition.x;
+    displayCam.GetComponent<DisplayUI> ().updateUIPositions (x_shift);
     Camera.main.transform.position = new Vector3 (Camera.main.transform.position.x, this.originalYPos, Camera.main.transform.position.z);
   }
 }

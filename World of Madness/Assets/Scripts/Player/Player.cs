@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class Player : MonoBehaviour {
+  private GameObject displayCam;
+
   // Player attributes
   private int lives;
   private float moveSpeed = 25.0f;
@@ -35,13 +37,14 @@ public class Player : MonoBehaviour {
     this.currentPowerup = PowerUps.NONE;
     this.currentActive = Actives.NONE;
     this.originalPlayerColor = transform.Find("pCube1").GetComponent<Renderer>().material.color;
+    this.displayCam = GameObject.Find ("DisplayCam");
   }
 
 
   // Have player gain life when collecting sushi tokens
   public void gainLife() {
     this.lives += 1;
-    Camera.main.GetComponent<DisplayUI>().gainPlayerLife(transform.tag);
+    displayCam.GetComponent<DisplayUI>().gainPlayerLife(transform.tag);
   }
 
 
@@ -50,7 +53,7 @@ public class Player : MonoBehaviour {
     this.lives -= 1;
     this.hitMarkerExpireTime = 0.1f;
     showPlayerHitMarker();
-    Camera.main.GetComponent<DisplayUI>().losePlayerLife(transform.tag);
+    displayCam.GetComponent<DisplayUI>().losePlayerLife(transform.tag);
   }
 
 
