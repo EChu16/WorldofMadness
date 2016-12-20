@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour {
   public bool cameraCanMove = true;
   private float cameraMoveSpeed = 15.0f;
   private float cameraBottomFOV; // Field of View
+  private float originalYPos;
   private Vector3 lastCameraPosition;
 
   // Map attributes
@@ -56,6 +57,7 @@ public class GameManager : MonoBehaviour {
 	void Start () {
     currentWorldRow = 0;
     lastWorldRowPosition = 0;
+    this.originalYPos = Camera.main.transform.position.y;
     loadMapPlatformsFromFile("Maps/map_layout.txt");
     generatePlatform(0, 1); // Initial platform begins at 0
 	}
@@ -267,7 +269,7 @@ public class GameManager : MonoBehaviour {
     } else {
       Camera.main.transform.position = lastCameraPosition;
     }
-
     Camera.main.transform.position += Camera.main.GetComponent<CameraManager>().shakeMod;
+    Camera.main.transform.position = new Vector3 (Camera.main.transform.position.x, this.originalYPos, Camera.main.transform.position.z);
   }
 }

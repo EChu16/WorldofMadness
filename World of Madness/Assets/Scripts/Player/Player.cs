@@ -35,7 +35,6 @@ public class Player : MonoBehaviour {
     this.currentPowerup = PowerUps.NONE;
     this.currentActive = Actives.NONE;
     this.originalPlayerColor = transform.Find("pCube1").GetComponent<Renderer>().material.color;
-    Debug.Log (this.originalPlayerColor);
   }
 
   // Have player gain life when collecting sushi tokens
@@ -222,12 +221,10 @@ public class Player : MonoBehaviour {
 
       // Check if player was hit
       if (this.hitMarkerExpireTime >= 0) {
-        Debug.Log ("hit color");
         showPlayerHitMarker();
       }
       else {
         transform.Find("pCube1").GetComponent<Renderer>().material.color = this.originalPlayerColor;
-        Debug.Log ("original color");
       }
     }
     else {

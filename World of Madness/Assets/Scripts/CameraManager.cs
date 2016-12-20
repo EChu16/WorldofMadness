@@ -15,8 +15,6 @@ public class CameraManager : MonoBehaviour {
   public float decreaseFactor = 1.0f;
   public Vector3 shakeMod;
 
-  Vector3 originalPos;
-
   public void setDuration(float duration) {
     this.shakeDuration = duration;
   }
