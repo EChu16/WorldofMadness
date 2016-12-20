@@ -12,6 +12,7 @@ public class BombShrapnel : MonoBehaviour {
     this.expireTime = 0.1f;
 	}
 
+
   void OnCollisionEnter(Collision col) {
     if (col.gameObject.tag == "wall") {
       Destroy(col.gameObject);

@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour {
   //Traps
   public GameObject sandpitPrefab;
   public GameObject spikePrefab;
+  public GameObject playerFreezePrefab;
 
   // GameObjects after instantiating prefabs
   private GameObject player1;
@@ -50,7 +51,7 @@ public class GameManager : MonoBehaviour {
   private enum Objects{PLANE, WALL, PLAYER_1, PLAYER_2, POWER_UP, ACTIVE, PASSABLE_TRAP, DEATH_TRAP};
   private enum PowerUps{NINJA_STAR, BOMB};
   private enum Actives{SUSHI, BOOST, GAME_FREEZE};
-  private enum PassableTraps{SANDPIT};
+  private enum PassableTraps{SANDPIT, PLAYER_FREEZE};
   private enum DeathTraps{SPIKES};
 
   // At the beginning of initialization of game
@@ -131,6 +132,9 @@ public class GameManager : MonoBehaviour {
     switch (generatePassableTrap) {
     case PassableTraps.SANDPIT:
       allObjects[xVal].Add(Instantiate(sandpitPrefab, new Vector3(xVal * 10, 0.5f, (zVal * 10) - 45), sandpitPrefab.transform.rotation) as GameObject);
+      break;
+    case PassableTraps.PLAYER_FREEZE:
+      allObjects[xVal].Add(Instantiate(playerFreezePrefab, new Vector3(xVal * 10, 0.5f, (zVal * 10) - 45), playerFreezePrefab.transform.rotation) as GameObject);
       break;
     default:
       // Should never hit here

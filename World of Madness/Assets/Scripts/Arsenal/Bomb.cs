@@ -18,6 +18,7 @@ public class Bomb : MonoBehaviour {
     this.exploded = false;
     this.continueTranslate = true;
 	}
+
 	
   void OnTriggerEnter(Collider col) {
     // If bomb collides with a wall, explode and destroy wall blocks on impact
@@ -34,11 +35,6 @@ public class Bomb : MonoBehaviour {
       Camera.main.GetComponent<CameraManager> ().setDuration (0.3f);
       Destroy (gameObject);
     }
-    else if (col.gameObject.tag == "ground") {
-      //this.continueTranslate = false;
-    }
-    else {
-    }
   }
 
 
@@ -48,6 +44,7 @@ public class Bomb : MonoBehaviour {
     Instantiate (shrapnel, transform.position + transform.right*8, shrapnel.transform.rotation);
     Instantiate (shrapnel, transform.position - transform.right*8, shrapnel.transform.rotation);
   }
+
 
 	// Update is called once per frame
 	void Update () {

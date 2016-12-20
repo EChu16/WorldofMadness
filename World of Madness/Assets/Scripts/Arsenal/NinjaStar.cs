@@ -16,6 +16,7 @@ public class NinjaStar : MonoBehaviour {
     this.continueTranslate = true;
     this.hasAlreadyCollided = false;
 	}
+
 	
   void OnCollisionEnter(Collision col) {
     // If ninja star collides into a wall, have it stay stuck there like a real ninja star
@@ -30,6 +31,7 @@ public class NinjaStar : MonoBehaviour {
       Destroy(gameObject);
     }
   }
+
 
 	// Update is called once per frame
 	void Update () {

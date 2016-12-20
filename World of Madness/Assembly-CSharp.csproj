@@ -54,6 +54,7 @@
      <Compile Include="Assets\Scripts\GameTokens\PowerUp.cs" />
      <Compile Include="Assets\Scripts\Player\Player.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerMovement.cs" />
+     <Compile Include="Assets\Scripts\Traps\PlayerFreeze.cs" />
      <Compile Include="Assets\Scripts\Traps\Sandpit.cs" />
      <Compile Include="Assets\Scripts\Traps\Spikes.cs" />
      <None Include="Assets\Maps\map_layout.txt" />
