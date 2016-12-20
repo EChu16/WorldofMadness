@@ -27,7 +27,7 @@ public class Player : MonoBehaviour {
 
   // Set default attributes
   void Start() {
-    this.lives = 3;
+    this.lives = 5;
     this.activeExpireTime = -1;
     this.powerUpDelayTime = -1;
     this.currentDelayTime = -1;
@@ -37,32 +37,40 @@ public class Player : MonoBehaviour {
     this.originalPlayerColor = transform.Find("pCube1").GetComponent<Renderer>().material.color;
   }
 
+
   // Have player gain life when collecting sushi tokens
   public void gainLife() {
     this.lives += 1;
+    Camera.main.GetComponent<DisplayUI>().gainPlayerLife(transform.tag);
   }
+
 
   // Have player lose life when hurt
   public void loseLife() {
     this.lives -= 1;
     this.hitMarkerExpireTime = 0.1f;
     showPlayerHitMarker();
+    Camera.main.GetComponent<DisplayUI>().losePlayerLife(transform.tag);
   }
+
 
   // Set player's move speed
   public void setMoveSpeed(float newMoveSpeed) {
     this.moveSpeed = newMoveSpeed;
   }
 
+
   // Get player's move speed
   public float getMoveSpeed() {
     return this.moveSpeed;
   }
 
+
   // Decreases a current power up delay time so that it can hit <= 0
   private void decreasePowerUpDelayTime() {
     this.currentDelayTime -= Time.deltaTime;
   }
+
 
   // Set power up to player
   public void setPowerUp(int powerUp) {
@@ -76,6 +84,7 @@ public class Player : MonoBehaviour {
       break;
     }
   }
+
 
   // Do active effect on player
   public void setActive(int active) {
@@ -96,20 +105,24 @@ public class Player : MonoBehaviour {
     }
   }
 
+
   // Check if player is dead
   public bool isDead() {
     return this.lives == 0;
   }
+
 
   // Check if player has a current active
   private bool hasActive() {
     return this.currentActive != Actives.NONE;
   }
 
+
   // Decreases a current active time so that it can hit <= 0
   private void decreaseActiveTime() {
     this.activeExpireTime -= Time.deltaTime;
   }
+
 
   // Resets player to their original state and removes the active
   private void stopActive() {
@@ -124,15 +137,18 @@ public class Player : MonoBehaviour {
     this.currentActive = Actives.NONE;
   }
 
+
   // Check if player has an existing powerup active
   private bool hasPowerUp() {
     return this.currentPowerup != PowerUps.NONE;
   }
 
+
   // Mostly for debugging
   public int getPowerUp() {
     return (int)this.currentPowerup;
   }
+
 
   // Use power up
   private void usePowerUp(PowerUps powerUp) {
@@ -140,15 +156,16 @@ public class Player : MonoBehaviour {
     case PowerUps.NINJA_STAR:
       // Create Ninja Star and shoot it
       ninjaStar.direction = transform.forward;
-      Instantiate (ninjaStar, transform.position + transform.forward*5, ninjaStar.transform.rotation);
+      Instantiate (ninjaStar, (transform.position + (transform.forward * 5) + new Vector3(0, 5.0f, 0)), ninjaStar.transform.rotation);
       break;
     case PowerUps.BOMB:
       bomb.direction = transform.forward;
-      Instantiate (bomb, transform.position + transform.forward*5, bomb.transform.rotation);
+      Instantiate (bomb, (transform.position + (transform.forward * 5) + new Vector3(0, 5.0f, 0)), bomb.transform.rotation);
       break;
     }
     this.currentDelayTime = this.powerUpDelayTime;
   }
+
 
   // See if player wants to use their powerup or item
   public void checkForPlayerInput() {
@@ -168,15 +185,18 @@ public class Player : MonoBehaviour {
     }
   }
 
+
   // Kill the player instantly
   private void die() {
     this.lives = 0;
   }
 
+
   // Check if player fell off the map
   private bool playerFellOff() {
     return transform.position.y < -5.0f;
   }
+
 
   // Flash player color to show it was hit
   private void showPlayerHitMarker() {
@@ -184,10 +204,12 @@ public class Player : MonoBehaviour {
     decreaseHitMarkerExpireTime();
   }
 
+
   // Decrease hit marker expire time
   private void decreaseHitMarkerExpireTime() {
     this.hitMarkerExpireTime -= Time.deltaTime;
   }
+
 
   // Update game per frame while checking for conditions
   void Update() {

@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour {
   private enum PassableTraps{SANDPIT, PLAYER_FREEZE};
   private enum DeathTraps{SPIKES};
 
+
   // At the beginning of initialization of game
 	void Start () {
     currentWorldRow = 0;
@@ -63,10 +64,12 @@ public class GameManager : MonoBehaviour {
     generatePlatform(0, 1); // Initial platform begins at 0
 	}
 
+
   // Fast way to convert a type 'char' to type 'int'
   public static int convertCharToIntFast(char val) {
     return (val - 48);
   }
+
 
   // Load chunk of platform from text file
   private int[,] loadMapChunk(StreamReader mapReader) {
@@ -80,6 +83,7 @@ public class GameManager : MonoBehaviour {
     return mapChunk;
   }
 
+
   // Load all platforms from text file
   private void loadMapPlatformsFromFile(string fileName) {
     string row;
@@ -88,6 +92,7 @@ public class GameManager : MonoBehaviour {
       gameMaps[row] = loadMapChunk(mapReader);
     }
   }
+
 
   // Create a random power up
   private void instantiateRandomPowerUp(int xVal, int zVal) {
@@ -105,6 +110,7 @@ public class GameManager : MonoBehaviour {
       break;
     }
   }
+
 
   // Create a random active
   private void instantiateRandomActive(int xVal, int zVal) {
@@ -126,6 +132,7 @@ public class GameManager : MonoBehaviour {
     }
   }
 
+
   // Create a random Trap
   private void instantiateRandomPassableTrap(int xVal, int zVal) {
     PassableTraps generatePassableTrap = (PassableTraps)(Random.Range(0, System.Enum.GetValues (typeof(PassableTraps)).Length));
@@ -143,6 +150,7 @@ public class GameManager : MonoBehaviour {
     }
   }
 
+
   // Create a random Trap
   private void instantiateRandomDeathTrap(int xVal, int zVal) {
     DeathTraps generateDeathTrap = (DeathTraps)(Random.Range(0, System.Enum.GetValues (typeof(DeathTraps)).Length));
@@ -156,6 +164,7 @@ public class GameManager : MonoBehaviour {
       break;
     }
   }
+
 
   // Create type of object from its type of value
   private void instantiateObject(Objects obj, int xVal, int zVal) {
@@ -185,6 +194,7 @@ public class GameManager : MonoBehaviour {
     }
   }
 
+
   // Generate platform
   private void generatePlatform(int platform, int specificPlatform=-1) {
     string key = (platform).ToString () + "-";
@@ -203,10 +213,12 @@ public class GameManager : MonoBehaviour {
     }
   }
 
+
   // Determine if player 1's x position is greater than player 2
   private bool Player1isAhead() {
     return player1.transform.position.x > player2.transform.position.x;
   }
+
 
   // Adjust camera to center on player furthest ahead
   private void adjustCameraView() {
@@ -220,7 +232,10 @@ public class GameManager : MonoBehaviour {
       newXVal = (player2.transform.position + transform.forward * Time.deltaTime * cameraMoveSpeed).x;
     }
     camera.transform.position = new Vector3(newXVal, camera.transform.position.y, camera.transform.position.z);
+
+    Camera.main.GetComponent<DisplayUI>().updateUIPositions(newXVal - lastCameraPosition.x);
   }
+
 
   // Create or destroy platform as needed
   private void alterMapAsNeeded() {
@@ -250,27 +265,32 @@ public class GameManager : MonoBehaviour {
     }
   }
 
+
   // Don't allow camera to readjust (Freeze effect)
   public void toggleCameraMovement() {
     this.cameraCanMove = !this.cameraCanMove;
   }
+
 
   // Check if game is over
   public bool isGameOver() {
     return player1.gameObject == null || player2.gameObject == null;
   }
 
+
   // Update game per frame
 	void Update () {
     if (!isGameOver ()) {
       if (this.cameraCanMove) {
-        adjustCameraView ();
         lastCameraPosition = Camera.main.transform.position;
-      } else {
+        adjustCameraView ();
+      }
+      else {
         Camera.main.transform.position = lastCameraPosition;
       }
-      alterMapAsNeeded ();
-    } else {
+      alterMapAsNeeded();
+    }
+    else {
       Camera.main.transform.position = lastCameraPosition;
     }
     Camera.main.transform.position += Camera.main.GetComponent<CameraManager>().shakeMod;

@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour {
   // Update is called once per frame
   void Update () {
     // Check move speed per frame
-    moveSpeed = GetComponent<Player> ().getMoveSpeed ();
+    moveSpeed = GetComponent<Player>().getMoveSpeed ();
     // Check if player freeze token is active
     if (!this.isFrozen) {
       if (myTransform.tag == "player1") {
