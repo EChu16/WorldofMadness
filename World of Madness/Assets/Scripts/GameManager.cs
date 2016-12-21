@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviour {
   public GameObject wall;
   public GameObject player1prefab;
   public GameObject player2prefab;
+  public GameObject titleScreenPrefab;
+  public GameObject p1losePrefab;
+  public GameObject p2losePrefab;
 
   // Power ups
   public GameObject ninjaStarPrefab;
@@ -60,13 +63,20 @@ public class GameManager : MonoBehaviour {
 
   private State currentState;
   private bool titleScreenLoaded;
+  private bool loseScreenLoaded;
+  private GameObject titleScreenDisplay;
+  private GameObject loseScreenP1;
+  private GameObject loseScreenP2;
+  private string deadPlayer;
 
 
   // At the beginning of initialization of game
   void Start () {
     this.currentState = State.TITLESCREEN;
     this.titleScreenLoaded = false;
+    this.loseScreenLoaded = false;
     this.initialStartOfGameCamPos = Camera.main.transform.position;
+    this.deadPlayer = "";
   }
 
 
@@ -257,7 +267,7 @@ public class GameManager : MonoBehaviour {
     }
 
     // Destroy platform rows if player doesn't see that platform anymore
-    if(cameraBottomFOV > ((lastWorldRowPosition * 10) + 7.0f)) {
+    if(cameraBottomFOV > ((lastWorldRowPosition * 10))) {
       // Prevent removing a plane more than once
       if (allPlatformRows[0].transform.position.x == (lastWorldRowPosition * 10.0f)) {
         Destroy (allPlatformRows [0]);
@@ -288,7 +298,8 @@ public class GameManager : MonoBehaviour {
 
 
   private void loadTitleScreen() {
-
+    titleScreenDisplay = Instantiate(titleScreenPrefab, new Vector3(15, 0, 0), titleScreenPrefab.transform.rotation) as GameObject;
+    this.titleScreenLoaded = true;
   }
 
 
@@ -301,6 +312,7 @@ public class GameManager : MonoBehaviour {
       loadMapPlatformsFromFile("Maps/map_layout.txt");
       generatePlatform(0, 1); // Initial platform begins at 0
       displayCam.GetComponent<DisplayUI>().loadDisplayUI();
+      Destroy (titleScreenDisplay);
       this.currentState = State.GAME;
     }
   }
@@ -308,30 +320,37 @@ public class GameManager : MonoBehaviour {
 
   private void displayLoseScreen(string deadPlayer) {
     if (deadPlayer == "PLAYER1") {
-
+      loseScreenP1 = Instantiate(p1losePrefab, new Vector3(15, 0, 0), p1losePrefab.transform.rotation) as GameObject;
     }
     else {
-
+      loseScreenP2 = Instantiate(p2losePrefab, new Vector3(15, 0, 0), p2losePrefab.transform.rotation) as GameObject;
     }
+    this.loseScreenLoaded = true;
   }
 
 
   private void waitForPlayerChoice() {
     // Load Title Screen
     if (Input.GetKeyDown (KeyCode.T)) {
-      clearGame();
       this.titleScreenLoaded = false;
+      if (loseScreenP1 != null) { Destroy(loseScreenP1); }
+      else { Destroy(loseScreenP2); }
+      this.loseScreenLoaded = false;
+      this.deadPlayer = "";
       this.currentState = State.TITLESCREEN;
     }
     else if (Input.GetKeyDown (KeyCode.R)) {
       // Restart game
-      clearGame();
       this.lastWorldRowPosition = 0;
       this.currentWorldRow = 0;
       this.originalYPos = Camera.main.transform.position.y;
       allPlatformRows = new List<GameObject>();
       generatePlatform(0, 1); // Initial platform begins at 0
       displayCam.GetComponent<DisplayUI>().loadDisplayUI();
+      if (loseScreenP1 != null) { Destroy(loseScreenP1); }
+      else { Destroy(loseScreenP2); }
+      this.loseScreenLoaded = false;
+      this.deadPlayer = "";
       this.currentState = State.GAME;
     }
   }
@@ -343,7 +362,7 @@ public class GameManager : MonoBehaviour {
     GameObject[] allGameObjects = (FindObjectsOfType<GameObject>() as GameObject[]);
     foreach (GameObject gameObj in allGameObjects) {
       if (gameObj.activeInHierarchy) {
-        if (gameObj.transform.tag == "MainCamera" || gameObj.transform.tag == "displaycam" || gameObj.transform.tag == "light" || gameObj.transform.tag == "GameController") {
+        if (gameObj.transform.tag == "MainCamera" || gameObj.transform.tag == "displaycam" || gameObj.transform.tag == "light" || gameObj.transform.tag == "GameController" || gameObj.transform.tag == "titlescreen" || gameObj.transform.tag == "losescreen") {
           // Keep Alive
         }
         else {
@@ -381,6 +400,13 @@ public class GameManager : MonoBehaviour {
       }
       else {
         currentState = State.LOSE;
+        if (player1.gameObject == null) {
+          this.deadPlayer = "PLAYER1";
+        }
+        else {
+          this.deadPlayer = "PLAYER2";
+        }
+        clearGame ();
       }
       beforeShakeCameraPosition = Camera.main.transform.position;
       Camera.main.transform.position += Camera.main.GetComponent<CameraManager> ().shakeMod;
@@ -389,11 +415,8 @@ public class GameManager : MonoBehaviour {
       Camera.main.transform.position = new Vector3 (Camera.main.transform.position.x, this.originalYPos, Camera.main.transform.position.z);
     } 
     else if (currentState == State.LOSE) {
-      if (player1.gameObject == null) {
-        displayLoseScreen ("PLAYER1");
-      }
-      else {
-        displayLoseScreen ("PLAYER2");
+      if (!this.loseScreenLoaded) {
+        displayLoseScreen(this.deadPlayer);
       }
       waitForPlayerChoice ();
     }

@@ -15,11 +15,6 @@ public class DisplayUI : MonoBehaviour {
   private int initialPlayerLives;
   private Vector3 yShift;
 
-  // Use this for initialization
-  void Start() {
-    
-  }
-
 
   public void loadDisplayUI() {
     // Instantiate display UI
@@ -33,16 +28,16 @@ public class DisplayUI : MonoBehaviour {
 
   // Instantiate player header titles
   private void instantiatePlayerHeaders() {
-    p1Header = Instantiate(p1DisplayPrefab, new Vector3(21.0f, 35.0f, 21.5f), p1DisplayPrefab.transform.rotation) as GameObject;
-    p2Header = Instantiate(p2DisplayPrefab, new Vector3(21.0f, 35, -16.2f), p2DisplayPrefab.transform.rotation) as GameObject;
+    p1Header = Instantiate(p1DisplayPrefab, new Vector3(23.0f, 35.0f, 21.5f), p1DisplayPrefab.transform.rotation) as GameObject;
+    p2Header = Instantiate(p2DisplayPrefab, new Vector3(23.0f, 35, -16.2f), p2DisplayPrefab.transform.rotation) as GameObject;
   }
 
 
   // Instantiate heart icons for both players
   private void instantiatePlayerLifeIcons() {
     for (int i = 0; i < this.initialPlayerLives; i++) {
-      this.playerOneLives.Add(Instantiate(heartPrefab, new Vector3(19.5f, 35.0f, i + 17.0f), heartPrefab.transform.rotation) as GameObject);
-      this.playerTwoLives.Add(Instantiate(heartPrefab, new Vector3(19.5f, 35.0f, i - 21.2f), heartPrefab.transform.rotation) as GameObject);
+      this.playerOneLives.Add(Instantiate(heartPrefab, new Vector3(21.5f, 35.0f, i + 17.0f), heartPrefab.transform.rotation) as GameObject);
+      this.playerTwoLives.Add(Instantiate(heartPrefab, new Vector3(21.5f, 35.0f, i - 21.2f), heartPrefab.transform.rotation) as GameObject);
     }
   }
 
