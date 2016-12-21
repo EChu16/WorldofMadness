@@ -339,6 +339,7 @@ public class GameManager : MonoBehaviour {
 
   private void clearGame() {
     this.lastWorldRowPosition = 0;
+    this.cameraCanMove = true;
     GameObject[] allGameObjects = (FindObjectsOfType<GameObject>() as GameObject[]);
     foreach (GameObject gameObj in allGameObjects) {
       if (gameObj.activeInHierarchy) {
