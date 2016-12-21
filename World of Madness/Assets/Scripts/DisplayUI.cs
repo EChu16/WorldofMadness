@@ -16,13 +16,16 @@ public class DisplayUI : MonoBehaviour {
   private Vector3 yShift;
 
   // Use this for initialization
-  void Start () {
-    // Initial setting of attributes
+  void Start() {
+    
+  }
+
+
+  public void loadDisplayUI() {
+    // Instantiate display UI
     this.initialPlayerLives = 5;
     this.playerOneLives = new List<GameObject>();
     this.playerTwoLives = new List<GameObject>();
-
-    // Instantiate display UI
     instantiatePlayerHeaders();
     instantiatePlayerLifeIcons();
   }

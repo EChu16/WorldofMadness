@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour {
   // GameObjects after instantiating prefabs
   private GameObject player1;
   private GameObject player2;
-  private List<GameObject> allPlatformRows = new List<GameObject>();
+  private List<GameObject> allPlatformRows;
   private Dictionary<int, List<GameObject>> allObjects = new Dictionary<int, List<GameObject>>();
 
   // Camera attributes
@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour {
   private float originalYPos;
   private Vector3 lastCameraPosition;
   private Vector3 beforeShakeCameraPosition;
+  private Vector3 initialStartOfGameCamPos;
 
   // Map attributes
   private Dictionary<string, int[,]> gameMaps = new Dictionary<string, int[,]>();
@@ -50,21 +51,23 @@ public class GameManager : MonoBehaviour {
   private int lastWorldRowPosition;
 
   // Mainly for readability - enum wrappers for different items
+  private enum State{TITLESCREEN, GAME, LOSE};
   private enum Objects{PLANE, WALL, PLAYER_1, PLAYER_2, POWER_UP, ACTIVE, PASSABLE_TRAP, DEATH_TRAP};
   private enum PowerUps{NINJA_STAR, BOMB};
   private enum Actives{SUSHI, BOOST, GAME_FREEZE};
   private enum PassableTraps{SANDPIT, PLAYER_FREEZE};
   private enum DeathTraps{SPIKES, LAVA};
 
+  private State currentState;
+  private bool titleScreenLoaded;
+
 
   // At the beginning of initialization of game
-	void Start () {
-    currentWorldRow = 0;
-    lastWorldRowPosition = 0;
-    this.originalYPos = Camera.main.transform.position.y;
-    loadMapPlatformsFromFile("Maps/map_layout.txt");
-    generatePlatform(0, 1); // Initial platform begins at 0
-	}
+  void Start () {
+    this.currentState = State.TITLESCREEN;
+    this.titleScreenLoaded = false;
+    this.initialStartOfGameCamPos = Camera.main.transform.position;
+  }
 
 
   // Fast way to convert a type 'char' to type 'int'
@@ -284,29 +287,114 @@ public class GameManager : MonoBehaviour {
   }
 
 
-  // Update game per frame
-	void Update () {
-    if (!isGameOver ()) {
-      if (this.cameraCanMove) {
-        lastCameraPosition = Camera.main.transform.position;
-        adjustCameraView ();
-      }
-      else {
-        float xShift = lastCameraPosition.x - Camera.main.transform.position.x;
-        displayCam.GetComponent<DisplayUI> ().updateUIPositions (xShift);
-        Camera.main.transform.position = lastCameraPosition;
-        displayCam.transform.position = lastCameraPosition;
-      }
-      alterMapAsNeeded();
+  private void loadTitleScreen() {
+
+  }
+
+
+  private void startGameWhenPlayerReady() {
+    if (Input.GetKeyDown (KeyCode.Space)) {
+      this.lastWorldRowPosition = 0;
+      this.currentWorldRow = 0;
+      this.originalYPos = Camera.main.transform.position.y;
+      allPlatformRows = new List<GameObject>();
+      loadMapPlatformsFromFile("Maps/map_layout.txt");
+      generatePlatform(0, 1); // Initial platform begins at 0
+      displayCam.GetComponent<DisplayUI>().loadDisplayUI();
+      this.currentState = State.GAME;
+    }
+  }
+
+
+  private void displayLoseScreen(string deadPlayer) {
+    if (deadPlayer == "PLAYER1") {
+
     }
     else {
-      Camera.main.transform.position = lastCameraPosition;
-      displayCam.transform.position = lastCameraPosition;
+
     }
-    beforeShakeCameraPosition = Camera.main.transform.position;
-    Camera.main.transform.position += Camera.main.GetComponent<CameraManager>().shakeMod;
-    float x_shift =  Camera.main.transform.position.x - beforeShakeCameraPosition.x;
-    displayCam.GetComponent<DisplayUI> ().updateUIPositions (x_shift);
-    Camera.main.transform.position = new Vector3 (Camera.main.transform.position.x, this.originalYPos, Camera.main.transform.position.z);
+  }
+
+
+  private void waitForPlayerChoice() {
+    // Load Title Screen
+    if (Input.GetKeyDown (KeyCode.T)) {
+      clearGame();
+      this.titleScreenLoaded = false;
+      this.currentState = State.TITLESCREEN;
+    }
+    else if (Input.GetKeyDown (KeyCode.R)) {
+      // Restart game
+      clearGame();
+      this.lastWorldRowPosition = 0;
+      this.currentWorldRow = 0;
+      this.originalYPos = Camera.main.transform.position.y;
+      allPlatformRows = new List<GameObject>();
+      generatePlatform(0, 1); // Initial platform begins at 0
+      displayCam.GetComponent<DisplayUI>().loadDisplayUI();
+      this.currentState = State.GAME;
+    }
+  }
+
+
+  private void clearGame() {
+    this.lastWorldRowPosition = 0;
+    GameObject[] allGameObjects = (FindObjectsOfType<GameObject>() as GameObject[]);
+    foreach (GameObject gameObj in allGameObjects) {
+      if (gameObj.activeInHierarchy) {
+        if (gameObj.transform.tag == "MainCamera" || gameObj.transform.tag == "displaycam" || gameObj.transform.tag == "light" || gameObj.transform.tag == "GameController") {
+          // Keep Alive
+        }
+        else {
+          Destroy (gameObj);
+        }
+      }
+    }
+    // Reset Camera positions
+    Camera.main.transform.position = this.initialStartOfGameCamPos;
+    displayCam.transform.position = this.initialStartOfGameCamPos;
+  }
+
+
+  // Update game per frame
+  void Update () {
+    if (currentState == State.TITLESCREEN) {
+      if (!this.titleScreenLoaded) {
+        loadTitleScreen();
+      }
+      startGameWhenPlayerReady();
+    }
+    else if (currentState == State.GAME) {
+      if (!isGameOver ()) {
+        if (this.cameraCanMove) {
+          lastCameraPosition = Camera.main.transform.position;
+          adjustCameraView ();
+        }
+        else {
+          float xShift = lastCameraPosition.x - Camera.main.transform.position.x;
+          displayCam.GetComponent<DisplayUI> ().updateUIPositions (xShift);
+          Camera.main.transform.position = lastCameraPosition;
+          displayCam.transform.position = lastCameraPosition;
+        }
+        alterMapAsNeeded ();
+      }
+      else {
+        currentState = State.LOSE;
+      }
+      beforeShakeCameraPosition = Camera.main.transform.position;
+      Camera.main.transform.position += Camera.main.GetComponent<CameraManager> ().shakeMod;
+      float x_shift = Camera.main.transform.position.x - beforeShakeCameraPosition.x;
+      displayCam.GetComponent<DisplayUI> ().updateUIPositions (x_shift);
+      Camera.main.transform.position = new Vector3 (Camera.main.transform.position.x, this.originalYPos, Camera.main.transform.position.z);
+    } 
+    else if (currentState == State.LOSE) {
+      if (player1.gameObject == null) {
+        displayLoseScreen ("PLAYER1");
+      }
+      else {
+        displayLoseScreen ("PLAYER2");
+      }
+      waitForPlayerChoice ();
+    }
   }
 }

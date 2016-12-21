@@ -163,7 +163,7 @@ public class Player : MonoBehaviour {
       break;
     case PowerUps.BOMB:
       bomb.direction = transform.forward;
-      Instantiate (bomb, (transform.position + (transform.forward * 5) + new Vector3(0, 5.0f, 0)), bomb.transform.rotation);
+      Instantiate (bomb, (transform.position + (transform.forward * 8) + new Vector3(0, 5.0f, 0)), bomb.transform.rotation);
       break;
     }
     this.currentDelayTime = this.powerUpDelayTime;
