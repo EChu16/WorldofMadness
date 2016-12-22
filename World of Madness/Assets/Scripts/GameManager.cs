@@ -110,7 +110,8 @@ public class GameManager : MonoBehaviour {
   // Load all platforms from text file
   private void loadMapPlatformsFromFile(string fileName) {
     string row;
-    StreamReader mapReader = new StreamReader(Application.dataPath + "/" + fileName, Encoding.Default);
+    TextAsset ta = Resources.Load<TextAsset>(fileName);
+    StreamReader mapReader = new StreamReader(Application.streamingAssetsPath + "/" + fileName, Encoding.Default);
     while ((row = mapReader.ReadLine()) != null) {
       gameMaps[row] = loadMapChunk(mapReader);
     }
