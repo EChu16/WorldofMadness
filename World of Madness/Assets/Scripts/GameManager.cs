@@ -6,6 +6,12 @@ using System.Text;
 
 public class GameManager : MonoBehaviour {
   // Default GameObject prefab initializations
+
+  //audio clips
+  public AudioClip menubgm;
+  public AudioClip gamebgm;
+  public AudioClip losebgm;
+
   // Core objects
   public Camera displayCam;
   public GameObject plane;
@@ -300,7 +306,10 @@ public class GameManager : MonoBehaviour {
   private void loadTitleScreen() {
     titleScreenDisplay = Instantiate(titleScreenPrefab, new Vector3(15, 0, 0), titleScreenPrefab.transform.rotation) as GameObject;
     this.titleScreenLoaded = true;
-  }
+
+    GetComponent<AudioSource>().clip = menubgm;
+    GetComponent<AudioSource>().Play();
+    }
 
 
   private void startGameWhenPlayerReady() {
@@ -314,6 +323,9 @@ public class GameManager : MonoBehaviour {
       displayCam.GetComponent<DisplayUI>().loadDisplayUI();
       Destroy (titleScreenDisplay);
       this.currentState = State.GAME;
+
+      GetComponent<AudioSource>().clip = gamebgm;
+      GetComponent<AudioSource>().Play();
     }
   }
 
@@ -326,7 +338,10 @@ public class GameManager : MonoBehaviour {
       loseScreenP2 = Instantiate(p2losePrefab, new Vector3(15, 0, 0), p2losePrefab.transform.rotation) as GameObject;
     }
     this.loseScreenLoaded = true;
-  }
+
+    GetComponent<AudioSource>().clip = losebgm;
+    GetComponent<AudioSource>().Play();
+    }
 
 
   private void waitForPlayerChoice() {
@@ -352,6 +367,9 @@ public class GameManager : MonoBehaviour {
       this.loseScreenLoaded = false;
       this.deadPlayer = "";
       this.currentState = State.GAME;
+
+      GetComponent<AudioSource>().clip = gamebgm;
+      GetComponent<AudioSource>().Play();
     }
   }
 
