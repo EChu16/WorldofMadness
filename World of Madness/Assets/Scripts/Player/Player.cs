@@ -39,7 +39,7 @@ public class Player : MonoBehaviour {
     this.hitMarkerExpireTime = -1;
     this.currentPowerup = PowerUps.NONE;
     this.currentActive = Actives.NONE;
-    this.originalPlayerColor = transform.Find("pCube1").GetComponent<Renderer>().material.color;
+    this.originalPlayerColor = transform.Find("pCylinder3").GetComponent<Renderer>().materials[1].color;
     this.displayCam = GameObject.Find ("DisplayCam");
   }
 
@@ -214,7 +214,7 @@ public class Player : MonoBehaviour {
 
   // Flash player color to show it was hit
   private void showPlayerHitMarker() {
-    transform.Find("pCube1").GetComponent<Renderer>().material.color = Color.white;
+    transform.Find("pCylinder3").GetComponent<Renderer>().materials[1].color = Color.white;
     decreaseHitMarkerExpireTime();
   }
 
@@ -260,7 +260,7 @@ public class Player : MonoBehaviour {
         showPlayerHitMarker();
       }
       else {
-        transform.Find("pCube1").GetComponent<Renderer>().material.color = this.originalPlayerColor;
+        transform.Find("pCylinder3").GetComponent<Renderer>().materials[1].color = this.originalPlayerColor;
       }
     }
     else {
