@@ -84,9 +84,11 @@ public class Player : MonoBehaviour {
     switch (this.currentPowerup) {
     case PowerUps.NINJA_STAR:
       this.powerUpDelayTime = 1.0f;
+      displayCam.GetComponent<DisplayUI>().changeWeaponDisplay(transform.tag, "NINJASTAR");
       break;
     case PowerUps.BOMB:
       this.powerUpDelayTime = 2.5f;
+      displayCam.GetComponent<DisplayUI>().changeWeaponDisplay(transform.tag, "BOMB");
       break;
     }
   }
@@ -107,6 +109,7 @@ public class Player : MonoBehaviour {
     case Actives.GAME_FREEZE:
       this.activeExpireTime = 10.0f;
       GameObject.FindWithTag("GameController").GetComponent<GameManager>().toggleCameraMovement();
+      displayCam.GetComponent<DisplayUI>().applyFreezeEffect(this.activeExpireTime);
       break;
     }
   }
