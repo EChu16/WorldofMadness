@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour {
   public AudioClip menubgm;
   public AudioClip gamebgm;
   public AudioClip losebgm;
+  public AudioClip star;
+  public AudioClip bomb;
 
   // Core objects
   public Camera displayCam;

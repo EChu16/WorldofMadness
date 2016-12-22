@@ -76,11 +76,13 @@
     <Compile Include="Assets\Scripts\Arsenal\BombShrapnel.cs" />
     <Compile Include="Assets\Scripts\Arsenal\NinjaStar.cs" />
     <Compile Include="Assets\Scripts\CameraManager.cs" />
+    <Compile Include="Assets\Scripts\DisplayUI.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\GameTokens\Active.cs" />
     <Compile Include="Assets\Scripts\GameTokens\PowerUp.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerMovement.cs" />
+    <Compile Include="Assets\Scripts\Traps\Lava.cs" />
     <Compile Include="Assets\Scripts\Traps\PlayerFreeze.cs" />
     <Compile Include="Assets\Scripts\Traps\Sandpit.cs" />
     <Compile Include="Assets\Scripts\Traps\Spikes.cs" />

@@ -4,6 +4,9 @@ using System.Collections;
 public class Player : MonoBehaviour {
   private GameObject displayCam;
 
+  public AudioClip star;
+  public AudioClip boom;
+
   // Player attributes
   private int lives;
   private float moveSpeed = 25.0f;
@@ -158,10 +161,18 @@ public class Player : MonoBehaviour {
     switch (powerUp) {
     case PowerUps.NINJA_STAR:
       // Create Ninja Star and shoot it
+
+      GetComponent<AudioSource>().clip = star;
+      GetComponent<AudioSource>().Play();
+
       ninjaStar.direction = transform.forward;
       Instantiate (ninjaStar, (transform.position + (transform.forward * 5) + new Vector3(0, 5.0f, 0)), ninjaStar.transform.rotation);
       break;
     case PowerUps.BOMB:
+
+      GetComponent<AudioSource>().clip = boom;
+      GetComponent<AudioSource>().Play();
+
       bomb.direction = transform.forward;
       Instantiate (bomb, (transform.position + (transform.forward * 8) + new Vector3(0, 5.0f, 0)), bomb.transform.rotation);
       break;

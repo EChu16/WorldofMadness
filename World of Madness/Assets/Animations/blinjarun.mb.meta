@@ -227,7 +227,9 @@ ModelImporter:
     4300006: pSphere2
     4300008: pCube2
     4300010: pCylinder3
-    7400000: Take 001
+    7400000: run
+    7400002: throw
+    7400004: idle
     9500000: //RootNode
     13700000: pCylinder3
   materials:
@@ -250,7 +252,673 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: run
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 24
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: back
+        weight: 1
+      - path: bottom
+        weight: 1
+      - path: joint1
+        weight: 1
+      - path: joint1/joint2
+        weight: 1
+      - path: joint1/joint2/joint3
+        weight: 1
+      - path: joint1/joint2/joint3/joint4
+        weight: 1
+      - path: joint1/joint5
+        weight: 1
+      - path: joint1/joint5/joint6
+        weight: 1
+      - path: joint1/joint5/joint6/joint7
+        weight: 1
+      - path: joint1/joint5/joint6/joint7/joint8
+        weight: 1
+      - path: joint1/joint5/joint6/joint7/joint8/joint9
+        weight: 1
+      - path: joint1/joint5/joint11
+        weight: 1
+      - path: joint1/joint5/joint11/joint12
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint14
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint14/joint15
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint14/joint15/joint16
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint14/joint15/joint16/joint17
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint28
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint28/joint29
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint28/joint29/joint30
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint28/joint29/joint30/joint31
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20/joint21
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20/joint21/joint22
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20/joint21/joint22/joint23
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20/joint32
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20/joint38
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20/joint38/joint39
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20/joint38/joint39/joint40
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint36
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint36/joint37
+        weight: 1
+      - path: joint1/joint25
+        weight: 1
+      - path: joint1/joint25/joint26
+        weight: 1
+      - path: joint1/joint25/joint26/joint27
+        weight: 1
+      - path: pCylinder1
+        weight: 1
+      - path: pCylinder1/transform27
+        weight: 1
+      - path: pCylinder2
+        weight: 1
+      - path: pCylinder2/transform29
+        weight: 1
+      - path: pCylinder3
+        weight: 1
+      - path: pSphere3
+        weight: 1
+      - path: pSphere3/transform9
+        weight: 1
+      - path: pSphere6
+        weight: 1
+      - path: pSphere6/transform2
+        weight: 1
+      - path: pSphere7
+        weight: 1
+      - path: pSphere7/transform7
+        weight: 1
+      - path: pSphere8
+        weight: 1
+      - path: pSphere8/transform6
+        weight: 1
+      - path: pSphere9
+        weight: 1
+      - path: pSphere9/transform4
+        weight: 1
+      - path: pSphere10
+        weight: 1
+      - path: pSphere10/transform1
+        weight: 1
+      - path: pSphere12
+        weight: 1
+      - path: pSphere12/transform8
+        weight: 1
+      - path: pSphere13
+        weight: 1
+      - path: pSphere13/transform5
+        weight: 1
+      - path: pSphere14
+        weight: 1
+      - path: pSphere14/transform17
+        weight: 1
+      - path: pSphere15
+        weight: 1
+      - path: pSphere15/transform24
+        weight: 1
+      - path: pSphere17
+        weight: 1
+      - path: pSphere17/transform25
+        weight: 1
+      - path: pSphere18
+        weight: 1
+      - path: pSphere18/transform23
+        weight: 1
+      - path: pSphere19
+        weight: 1
+      - path: pSphere19/transform3
+        weight: 1
+      - path: pSphere20
+        weight: 1
+      - path: pSphere20/transform10
+        weight: 1
+      - path: pSphere21
+        weight: 1
+      - path: pSphere21/transform11
+        weight: 1
+      - path: pSphere22
+        weight: 1
+      - path: pSphere22/transform12
+        weight: 1
+      - path: pSphere23
+        weight: 1
+      - path: pSphere23/transform13
+        weight: 1
+      - path: pSphere24
+        weight: 1
+      - path: pSphere24/transform15
+        weight: 1
+      - path: pSphere25
+        weight: 1
+      - path: pSphere25/transform14
+        weight: 1
+      - path: pSphere26
+        weight: 1
+      - path: pSphere26/transform16
+        weight: 1
+      - path: pSphere27
+        weight: 1
+      - path: pSphere27/transform18
+        weight: 1
+      - path: pSphere28
+        weight: 1
+      - path: pSphere28/transform19
+        weight: 1
+      - path: pSphere29
+        weight: 1
+      - path: pSphere29/transform21
+        weight: 1
+      - path: pSphere30
+        weight: 1
+      - path: pSphere30/transform20
+        weight: 1
+      - path: pSphere31
+        weight: 1
+      - path: pSphere31/transform22
+        weight: 1
+      - path: pSphere32
+        weight: 1
+      - path: pSphere32/transform28
+        weight: 1
+      - path: pSphere33
+        weight: 1
+      - path: pSphere33/transform26
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: throw
+      takeName: Take 001
+      firstFrame: 25
+      lastFrame: 31
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: back
+        weight: 1
+      - path: bottom
+        weight: 1
+      - path: joint1
+        weight: 1
+      - path: joint1/joint2
+        weight: 1
+      - path: joint1/joint2/joint3
+        weight: 1
+      - path: joint1/joint2/joint3/joint4
+        weight: 1
+      - path: joint1/joint5
+        weight: 1
+      - path: joint1/joint5/joint6
+        weight: 1
+      - path: joint1/joint5/joint6/joint7
+        weight: 1
+      - path: joint1/joint5/joint6/joint7/joint8
+        weight: 1
+      - path: joint1/joint5/joint6/joint7/joint8/joint9
+        weight: 1
+      - path: joint1/joint5/joint11
+        weight: 1
+      - path: joint1/joint5/joint11/joint12
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint14
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint14/joint15
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint14/joint15/joint16
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint14/joint15/joint16/joint17
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint28
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint28/joint29
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint28/joint29/joint30
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint28/joint29/joint30/joint31
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20/joint21
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20/joint21/joint22
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20/joint21/joint22/joint23
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20/joint32
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20/joint38
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20/joint38/joint39
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20/joint38/joint39/joint40
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint36
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint36/joint37
+        weight: 1
+      - path: joint1/joint25
+        weight: 1
+      - path: joint1/joint25/joint26
+        weight: 1
+      - path: joint1/joint25/joint26/joint27
+        weight: 1
+      - path: pCylinder1
+        weight: 1
+      - path: pCylinder1/transform27
+        weight: 1
+      - path: pCylinder2
+        weight: 1
+      - path: pCylinder2/transform29
+        weight: 1
+      - path: pCylinder3
+        weight: 1
+      - path: pSphere3
+        weight: 1
+      - path: pSphere3/transform9
+        weight: 1
+      - path: pSphere6
+        weight: 1
+      - path: pSphere6/transform2
+        weight: 1
+      - path: pSphere7
+        weight: 1
+      - path: pSphere7/transform7
+        weight: 1
+      - path: pSphere8
+        weight: 1
+      - path: pSphere8/transform6
+        weight: 1
+      - path: pSphere9
+        weight: 1
+      - path: pSphere9/transform4
+        weight: 1
+      - path: pSphere10
+        weight: 1
+      - path: pSphere10/transform1
+        weight: 1
+      - path: pSphere12
+        weight: 1
+      - path: pSphere12/transform8
+        weight: 1
+      - path: pSphere13
+        weight: 1
+      - path: pSphere13/transform5
+        weight: 1
+      - path: pSphere14
+        weight: 1
+      - path: pSphere14/transform17
+        weight: 1
+      - path: pSphere15
+        weight: 1
+      - path: pSphere15/transform24
+        weight: 1
+      - path: pSphere17
+        weight: 1
+      - path: pSphere17/transform25
+        weight: 1
+      - path: pSphere18
+        weight: 1
+      - path: pSphere18/transform23
+        weight: 1
+      - path: pSphere19
+        weight: 1
+      - path: pSphere19/transform3
+        weight: 1
+      - path: pSphere20
+        weight: 1
+      - path: pSphere20/transform10
+        weight: 1
+      - path: pSphere21
+        weight: 1
+      - path: pSphere21/transform11
+        weight: 1
+      - path: pSphere22
+        weight: 1
+      - path: pSphere22/transform12
+        weight: 1
+      - path: pSphere23
+        weight: 1
+      - path: pSphere23/transform13
+        weight: 1
+      - path: pSphere24
+        weight: 1
+      - path: pSphere24/transform15
+        weight: 1
+      - path: pSphere25
+        weight: 1
+      - path: pSphere25/transform14
+        weight: 1
+      - path: pSphere26
+        weight: 1
+      - path: pSphere26/transform16
+        weight: 1
+      - path: pSphere27
+        weight: 1
+      - path: pSphere27/transform18
+        weight: 1
+      - path: pSphere28
+        weight: 1
+      - path: pSphere28/transform19
+        weight: 1
+      - path: pSphere29
+        weight: 1
+      - path: pSphere29/transform21
+        weight: 1
+      - path: pSphere30
+        weight: 1
+      - path: pSphere30/transform20
+        weight: 1
+      - path: pSphere31
+        weight: 1
+      - path: pSphere31/transform22
+        weight: 1
+      - path: pSphere32
+        weight: 1
+      - path: pSphere32/transform28
+        weight: 1
+      - path: pSphere33
+        weight: 1
+      - path: pSphere33/transform26
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: idle
+      takeName: Take 001
+      firstFrame: 32
+      lastFrame: 36
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: back
+        weight: 1
+      - path: bottom
+        weight: 1
+      - path: joint1
+        weight: 1
+      - path: joint1/joint2
+        weight: 1
+      - path: joint1/joint2/joint3
+        weight: 1
+      - path: joint1/joint2/joint3/joint4
+        weight: 1
+      - path: joint1/joint5
+        weight: 1
+      - path: joint1/joint5/joint6
+        weight: 1
+      - path: joint1/joint5/joint6/joint7
+        weight: 1
+      - path: joint1/joint5/joint6/joint7/joint8
+        weight: 1
+      - path: joint1/joint5/joint6/joint7/joint8/joint9
+        weight: 1
+      - path: joint1/joint5/joint11
+        weight: 1
+      - path: joint1/joint5/joint11/joint12
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint14
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint14/joint15
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint14/joint15/joint16
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint14/joint15/joint16/joint17
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint28
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint28/joint29
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint28/joint29/joint30
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint13/joint28/joint29/joint30/joint31
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20/joint21
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20/joint21/joint22
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20/joint21/joint22/joint23
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20/joint32
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20/joint38
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20/joint38/joint39
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint20/joint38/joint39/joint40
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint36
+        weight: 1
+      - path: joint1/joint5/joint11/joint12/joint18/joint19/joint36/joint37
+        weight: 1
+      - path: joint1/joint25
+        weight: 1
+      - path: joint1/joint25/joint26
+        weight: 1
+      - path: joint1/joint25/joint26/joint27
+        weight: 1
+      - path: pCylinder1
+        weight: 1
+      - path: pCylinder1/transform27
+        weight: 1
+      - path: pCylinder2
+        weight: 1
+      - path: pCylinder2/transform29
+        weight: 1
+      - path: pCylinder3
+        weight: 1
+      - path: pSphere3
+        weight: 1
+      - path: pSphere3/transform9
+        weight: 1
+      - path: pSphere6
+        weight: 1
+      - path: pSphere6/transform2
+        weight: 1
+      - path: pSphere7
+        weight: 1
+      - path: pSphere7/transform7
+        weight: 1
+      - path: pSphere8
+        weight: 1
+      - path: pSphere8/transform6
+        weight: 1
+      - path: pSphere9
+        weight: 1
+      - path: pSphere9/transform4
+        weight: 1
+      - path: pSphere10
+        weight: 1
+      - path: pSphere10/transform1
+        weight: 1
+      - path: pSphere12
+        weight: 1
+      - path: pSphere12/transform8
+        weight: 1
+      - path: pSphere13
+        weight: 1
+      - path: pSphere13/transform5
+        weight: 1
+      - path: pSphere14
+        weight: 1
+      - path: pSphere14/transform17
+        weight: 1
+      - path: pSphere15
+        weight: 1
+      - path: pSphere15/transform24
+        weight: 1
+      - path: pSphere17
+        weight: 1
+      - path: pSphere17/transform25
+        weight: 1
+      - path: pSphere18
+        weight: 1
+      - path: pSphere18/transform23
+        weight: 1
+      - path: pSphere19
+        weight: 1
+      - path: pSphere19/transform3
+        weight: 1
+      - path: pSphere20
+        weight: 1
+      - path: pSphere20/transform10
+        weight: 1
+      - path: pSphere21
+        weight: 1
+      - path: pSphere21/transform11
+        weight: 1
+      - path: pSphere22
+        weight: 1
+      - path: pSphere22/transform12
+        weight: 1
+      - path: pSphere23
+        weight: 1
+      - path: pSphere23/transform13
+        weight: 1
+      - path: pSphere24
+        weight: 1
+      - path: pSphere24/transform15
+        weight: 1
+      - path: pSphere25
+        weight: 1
+      - path: pSphere25/transform14
+        weight: 1
+      - path: pSphere26
+        weight: 1
+      - path: pSphere26/transform16
+        weight: 1
+      - path: pSphere27
+        weight: 1
+      - path: pSphere27/transform18
+        weight: 1
+      - path: pSphere28
+        weight: 1
+      - path: pSphere28/transform19
+        weight: 1
+      - path: pSphere29
+        weight: 1
+      - path: pSphere29/transform21
+        weight: 1
+      - path: pSphere30
+        weight: 1
+      - path: pSphere30/transform20
+        weight: 1
+      - path: pSphere31
+        weight: 1
+      - path: pSphere31/transform22
+        weight: 1
+      - path: pSphere32
+        weight: 1
+      - path: pSphere32/transform28
+        weight: 1
+      - path: pSphere33
+        weight: 1
+      - path: pSphere33/transform26
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
     isReadable: 1
   meshes:
     lODScreenPercentages: []
